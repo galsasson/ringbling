@@ -24,7 +24,7 @@ var reversedScale = 1;
 
 var highRes = true;
 
-var camAngles = [{'x': -48, 'y':78, 'z':540, 'tx':45.5, 'ty':69.9, 'tz':483.5},
+var camAngles = [{'x': -156, 'y':87, 'z':605, 'tx':45.5, 'ty':69.9, 'tz':483.5},
                  {'x': 1173.9, 'y':236.6, 'z':1538.5, 'tx':107.2, 'ty':109.7, 'tz':223.7},
                  {'x': 426.9, 'y':178.8, 'z':70.3, 'tx':0, 'ty':80, 'tz':500},
                  {'x': -871.9, 'y':576.4, 'z':1625.6, 'tx':55.8, 'ty':104, 'tz':172.9}
@@ -153,6 +153,8 @@ function addGui()
     var lightG = gui.addFolder("LIGHT");
     lightG.add(spotLight, 'exponent', 0, 90);
     lightG.add(spotLight, 'intensity', 0, 4);
+
+    gui.add(ring, 'ringsOffset', -5.001, 5.001).onChange(function() {ring.updateGeometry(ring)});
 
     var ringG = gui.addFolder("RIGHT RING");
     ringG.add(ring.ringr, 'radius', 0, 30).onChange(function() {ring.updateGeometry(ring)});
