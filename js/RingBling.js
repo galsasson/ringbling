@@ -10,11 +10,14 @@ RingBling.prototype = Object.create(THREE.Object3D.prototype);
 RingBling.prototype.init = function()
 {
 	this.ringl = new Ring();
+	this.ringl.stride = -20;
 	this.ringl.init();
 	this.ringr = new Ring();
+	this.ringr.stride = 20;
 	this.ringr.init();
 	this.add(this.ringl);
 	this.add(this.ringr);
+	this.align();
 }
 
 RingBling.prototype.updateGeometry = function(that)
@@ -22,9 +25,14 @@ RingBling.prototype.updateGeometry = function(that)
 	that.ringl.updateGeometry(that.ringl);
 	that.ringr.updateGeometry(that.ringr);
 
+	that.align();
+}
+
+RingBling.prototype.align = function()
+{
 	// put rings end to end
-	that.ringl.position.set(0, 0, that.ringl.stride/2);
-	that.ringr.position.set(0, that.ringr.radius-that.ringl.radius, that.ringr.stride/2);
+	this.ringl.position.set(0, 0, this.ringl.stride/2);
+	this.ringr.position.set(0, this.ringr.radius-this.ringl.radius, this.ringr.stride/2);
 }
 
 
