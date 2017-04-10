@@ -22,14 +22,13 @@ Ring.prototype.init = function()
 
 Ring.prototype.updateGeometry = function(that)
 {
-	console.log("radius: " + that.radius);
 	that.geo = that.RingGeometry(that.radius, that.thickness, that.radialSegments, that.tubularSegments, Math.PI*2, that.extrude, that.stride);
 	if (that.mesh != null) {
 		that.remove(that.mesh);
 	}
 	that.mesh = new THREE.Mesh(that.geo, resMgr.materials.object);
 	that.mesh.castShadow = true;
-	that.mesh.receiveShadow = false;
+	that.mesh.receiveShadow = true;
 	this.add(that.mesh);
 }
 

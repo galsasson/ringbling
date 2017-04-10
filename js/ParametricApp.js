@@ -43,7 +43,7 @@ function onLoad()
     renderer = new THREE.WebGLRenderer( { antialias: true } );
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor(0);
-    renderer.shadowMapEnabled = true;
+    renderer.shadowMap.enabled = true;
     renderer.shadowMapSoft = true;
     container.appendChild( renderer.domElement );
 
@@ -111,7 +111,7 @@ function initSceneLights()
     spotLight.position.set(-200, 337, 1015);
     spotLight.target.position.set(-98, 82, 522);
     spotLight.castShadow = true;
-    spotLight.shadowCameraFar = 1500;
+    spotLight.shadow.camera.far = 1500;
     // spotLight.shadowCameraVisible = true;
     scene.add(spotLight);
 
@@ -385,8 +385,9 @@ function onMouseDown(event)
         ( event.clientX / window.innerWidth ) * 2 - 1,
       - ( event.clientY / window.innerHeight ) * 2 + 1,
         camera.near);
-    var projector = new THREE.Projector();
-    projector.unprojectVector( vector, camera );
+    // var projector = new THREE.Projector();
+    // projector.unprojectVector( vector, camera );
+    vector.unproject(camera);
 
     var ray = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize(), 0, 2000);
 
