@@ -7,6 +7,7 @@
     <script src="js/libs/OrbitControls.js"></script>
     <script src="js/libs/dat.gui.js"></script>
     <script src="js/libs/STLExporter.js"></script>
+    <script src="js/libs/download.js"></script>
     <script src="js/ResourceManager.js"></script>
     <script src="js/ParametricApp.js"></script>
     <script src="js/Ring.js"></script>
@@ -19,6 +20,9 @@
     <!-- three.js takes over this div (see ParametericApp.js) -->
     <div id="container" style="padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"></div>
 
+   <div style="padding: 0px; margin: 0px; position: absolute; left: 20px; bottom: 20px; width: 300px; color: #ddd; font-size: 16px; font-family: 'Alegreya Sans SC', sans-serif;">
+        <a href="#" style="color:#fff;" onclick="downloadModel();">Download STL Model</a>
+    </div>
 
 </body>
 </html>

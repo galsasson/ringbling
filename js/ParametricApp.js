@@ -290,18 +290,6 @@ function onKeyDown(evt)
         console.log(camera.position);
         console.log(controls.target);
     }
-    else if (keyCode == 69) // 'e'
-    {
-        // if (keyPressed[keyCode] == false) {
-            keyPressed[keyCode] = true;
-            // export to STL
-            console.log("exporting stl");
-            ring.updateMatrixWorld(true);
-            exporter = new THREE.STLExporter();
-            exporter.exportScene(ring);
-            exporter.sendToServer();
-        // }
-    }
     else if (keyCode == 70) {   // 'f'
         ring.toggleFaces();
     }
@@ -315,6 +303,15 @@ function onKeyDown(evt)
         nextClip();
         nextViewAngle();
     }
+}
+
+function downloadModel()
+{
+    console.log("exporting stl");
+    ring.updateMatrixWorld(true);
+    exporter = new THREE.STLExporter();
+    var data = exporter.exportScene(ring);
+    download(data, "ringbling.stl", "application/sla");
 }
 
 var currentClip = 0;
