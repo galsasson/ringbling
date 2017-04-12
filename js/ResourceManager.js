@@ -11,12 +11,24 @@ ResourceManager.prototype.initMaterials = function()
 	this.materials.object = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0xffffff, shininess: 150 } );
 	// this.materials.object.shading = THREE.FlatShading;
 
+	this.materials.ringl = new THREE.MeshPhongMaterial( { color: 0xbbbbff, specular: 0xbbbbff, shininess: 150 } );
+	// this.materials.object.shading = THREE.FlatShading;
+	this.materials.ringr = new THREE.MeshPhongMaterial( { color: 0xffbbbb, specular: 0xffbbbb, shininess: 150 } );
+	// this.materials.object.shading = THREE.FlatShading;
+
+
 	resMgr.materials.ring = new THREE.MeshPhongMaterial( { color: 0xffffff, specular:0xffffff, combine: THREE.MultiplyOperation } );
 	this.texLoader = new THREE.TextureLoader();
 	this.texLoader.load( "textures/sky.jpg", function(map) {
-		resMgr.materials.ring.envMap = map;
+		map.wrapS = THREE.RepeatWrapping;
+		map.wrapT = THREE.RepeatWrapping;
+		map.anisotropy = 4;
+		map.repeat.set(40, 10);
+		resMgr.materials.ring.bumpMap = map;
 		resMgr.materials.ring.needsUpdate = true;
 	} );
+
+
 	// console.log(this.texture);
 	// this.materials.ringr = new THREE.MeshPhongMaterial( { color: 0xffffff, specular:0xffffff, envMap: this.texture, combine: THREE.MultiplyOperation } );
 

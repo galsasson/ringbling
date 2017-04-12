@@ -12,9 +12,11 @@ RingBling.prototype.init = function()
 {
 	this.ringl = new Ring();
 	this.ringl.stride = -30;
+	this.ringl.material = resMgr.materials.ringl;
 	this.ringl.init();
 	this.ringr = new Ring();
 	this.ringr.stride = 30;
+	this.ringr.material = resMgr.materials.ringr;
 	this.ringr.init();
 	this.add(this.ringl);
 	this.add(this.ringr);

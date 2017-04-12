@@ -12,6 +12,7 @@ Ring = function()
 	this.showFaces = true;
 	this.showFaceMovement = true;
 	this.mesh = null;
+	this.material = null;
 }
 Ring.prototype = Object.create(THREE.Object3D.prototype);
 
@@ -26,7 +27,7 @@ Ring.prototype.updateGeometry = function(that)
 	if (that.mesh != null) {
 		that.remove(that.mesh);
 	}
-	that.mesh = new THREE.Mesh(that.geo, resMgr.materials.object);
+	that.mesh = new THREE.Mesh(that.geo, that.material?this.material:resMgr.materials.object);
 	that.mesh.castShadow = true;
 	that.mesh.receiveShadow = true;
 	this.add(that.mesh);
