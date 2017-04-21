@@ -2,13 +2,11 @@ Ring = function()
 {
 	THREE.Object3D.call(this);
 
-	this.radius = 8;
-	this.thickness = 2.5;
+	this.radius = 10;
+	this.thickness = 2;
 	this.radialSegments = 64;
 	this.tubularSegments = 128;
-	this.extrude = 0;
 	this.flaten = 0;
-	this.stride = 0;
 	this.showFaces = true;
 	this.showFaceMovement = true;
 	this.mesh = null;
@@ -17,9 +15,9 @@ Ring = function()
 	this.extra.mag = 0;
 	this.extra.freq = 0;
 	this.extra.clamp = false;
-	this.extra.strech = 0;
-	this.extra.flatten = false;
-	this.extra.trueTubOrientation = false;
+	this.extra.stride = 0;
+	this.extra.flatten = true;
+	this.extra.trueTubOrientation = true;
 }
 Ring.prototype = Object.create(THREE.Object3D.prototype);
 
@@ -30,7 +28,7 @@ Ring.prototype.init = function()
 
 Ring.prototype.updateGeometry = function(that)
 {
-	that.geo = that.RingGeometry(that.radius, that.thickness, that.radialSegments, that.tubularSegments, Math.PI*2, that.extrude, that.stride, that.extra);
+	that.geo = that.RingGeometry(that.radius, that.thickness, that.radialSegments, that.tubularSegments, Math.PI*2, that.extra);
 	if (that.mesh != null) {
 		that.remove(that.mesh);
 	}
@@ -40,7 +38,7 @@ Ring.prototype.updateGeometry = function(that)
 	this.add(that.mesh);
 }
 
-Ring.prototype.RingGeometry = function(radius, thickness, radialSegments, tubularSegments, arc, extrude, stride, extra)
+Ring.prototype.RingGeometry = function(radius, thickness, radialSegments, tubularSegments, arc, extra)
 {
 	var geo = new THREE.Geometry();
 
@@ -71,7 +69,7 @@ Ring.prototype.RingGeometry = function(radius, thickness, radialSegments, tubula
 
 		var rad = radVec.clone().multiplyScalar(1+radOsc).applyAxisAngle(new THREE.Vector3(0, 0, 1), r*radAng);
 		var tub = tubVec.clone().applyAxisAngle(new THREE.Vector3(0, 0, 1), r*radAng);
-		var strech = strechVec.clone().add(new THREE.Vector3(0, 0, extra.strech*Math.cos(r*radAng)));
+		var strech = strechVec.clone().add(new THREE.Vector3(0, 0, extra.stride*Math.cos(r*radAng)));
 
 		if (extra.trueTubOrientation) {
 			var nextRadOsc = extra.mag*(Math.sin(time));
@@ -80,7 +78,7 @@ Ring.prototype.RingGeometry = function(radius, thickness, radialSegments, tubula
 			}
 			var nextRad = radVec.clone().multiplyScalar(1+nextRadOsc).applyAxisAngle(new THREE.Vector3(0, 0, 1), (r+1)*radAng);
 			var nextTub = tubVec.clone().applyAxisAngle(new THREE.Vector3(0, 0, 1), (r+1)*radAng);
-			var nextStrech = strechVec.clone().add(new THREE.Vector3(0, 0, extra.strech*Math.cos((r+1)*radAng)));
+			var nextStrech = strechVec.clone().add(new THREE.Vector3(0, 0, extra.stride*Math.cos((r+1)*radAng)));
 
 			var rotAxis = nextStrech.add(nextRad).sub(nextTub).sub(strech.clone().add(rad).sub(tub)).normalize();
 		}
