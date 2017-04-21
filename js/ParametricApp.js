@@ -154,7 +154,7 @@ function addGui()
     lightG.add(spotLight, 'exponent', 0, 90);
     lightG.add(spotLight, 'intensity', 0, 4);
 
-    gui.add(ring, 'ringsOffset', -5.001, 5.001).onChange(function() {ring.updateGeometry(ring)});
+    gui.add(ring, 'ringsOffset', -10, 10).onChange(function() {ring.updateGeometry(ring)});
 
     var ringG = gui.addFolder("RIGHT RING");
     ringG.add(ring.ringr, 'radius', 0, 30).onChange(function() {ring.updateGeometry(ring)});
@@ -163,6 +163,12 @@ function addGui()
     ringG.add(ring.ringr, 'tubularSegments', 1, 300).onChange(function() {ring.updateGeometry(ring)});
     ringG.add(ring.ringr, 'extrude', -6, 10).onChange(function() {ring.updateGeometry(ring)});
     ringG.add(ring.ringr, 'stride', 0, 50).onChange(function() {ring.updateGeometry(ring)});
+    ringG.add(ring.ringr.extra, 'freq', 0, 20).onChange(function() {ring.updateGeometry(ring)});
+    ringG.add(ring.ringr.extra, 'mag', 0, 1).onChange(function() {ring.updateGeometry(ring)});
+    ringG.add(ring.ringr.extra, 'clamp').onChange(function() {ring.updateGeometry(ring)});
+    ringG.add(ring.ringr.extra, 'strech', 0, 20).onChange(function() {ring.updateGeometry(ring)});
+    ringG.add(ring.ringr.extra, 'flatten').onChange(function() {ring.updateGeometry(ring)});
+    ringG.add(ring.ringr.extra, 'trueTubOrientation').onChange(function() {ring.updateGeometry(ring)});
 
     var ringGL = gui.addFolder("LEFT RING");
     ringGL.add(ring.ringl, 'radius', 0, 30).onChange(function() {ring.updateGeometry(ring)});
@@ -171,6 +177,12 @@ function addGui()
     ringGL.add(ring.ringl, 'tubularSegments', 1, 300).onChange(function() {ring.updateGeometry(ring)});
     ringGL.add(ring.ringl, 'extrude', -6, 10).onChange(function() {ring.updateGeometry(ring)});
     ringGL.add(ring.ringl, 'stride', -50, 0).onChange(function() {ring.updateGeometry(ring)});
+    ringGL.add(ring.ringl.extra, 'freq', 0, 20).onChange(function() {ring.updateGeometry(ring)});
+    ringGL.add(ring.ringl.extra, 'mag', 0, 1).onChange(function() {ring.updateGeometry(ring)});
+    ringGL.add(ring.ringl.extra, 'clamp').onChange(function() {ring.updateGeometry(ring)});
+    ringGL.add(ring.ringl.extra, 'strech', -20, 0).onChange(function() {ring.updateGeometry(ring)});
+    ringGL.add(ring.ringl.extra, 'flatten').onChange(function() {ring.updateGeometry(ring)});
+    ringGL.add(ring.ringl.extra, 'trueTubOrientation').onChange(function() {ring.updateGeometry(ring)});
 /*
     var f4 = f1.addFolder('EYE GEOMETRY');
     f4.add(genome, 'eyeRadius', 0, 10).onChange(onGeometryChanged);
