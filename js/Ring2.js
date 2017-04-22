@@ -102,7 +102,7 @@ Ring.prototype.RingGeometry = function(width, height, thickness, radialSegments,
 		{
 			var tubShell = tub.clone().applyAxisAngle(rotAxis, t*tubAng);
 			tubShell.x *= extra.flatten;
-			tubShell.y *= extra.flatten;
+			tubShell.y *= map(Math.sin(r*radAng/2), 0, 1, extra.flatten, 1, true);
 			tubShell.applyAxisAngle(new THREE.Vector3(1, 0, 0), extra.flattenAngle);
 
 
