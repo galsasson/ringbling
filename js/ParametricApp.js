@@ -2,7 +2,7 @@ function ParametricApp() {
     var renderer = null;
     var scene = null;
     /* Constants */
-    var ratio = 1.138;
+    window.ratio = 1.138;
 
     var controls = null;
     var camera = null;

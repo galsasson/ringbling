@@ -69,7 +69,7 @@ Ring.prototype.RingGeometry = function(radius, thickness, radialSegments, tubula
 		// var rad = radVec.clone().multiplyScalar(1+radOsc).applyAxisAngle(new THREE.Vector3(0, 0, 1), r*radAng); // rad for circle
 		// var tub = tubVec.clone().applyAxisAngle(new THREE.Vector3(0, 0, 1), r*radAng);
 
-		var rad = new THREE.Vector3(radius*Math.cos(r*radAng+Math.PI/2), radius*ratio*Math.sin(r*radAng+Math.PI/2), 0);
+		var rad = new THREE.Vector3(radius*Math.cos(r*radAng+Math.PI/2), radius*window.ratio*Math.sin(r*radAng+Math.PI/2), 0);
 		var tub = rad.clone().normalize().multiplyScalar(thickness);
 		var strech = strechVec.clone().add(new THREE.Vector3(0, 0, extra.stride*Math.cos(r*radAng)));
 
@@ -81,7 +81,7 @@ Ring.prototype.RingGeometry = function(radius, thickness, radialSegments, tubula
 			// var nextRad = radVec.clone().multiplyScalar(1+nextRadOsc).applyAxisAngle(new THREE.Vector3(0, 0, 1), (r+1)*radAng);  // rad for circle
 			// var nextTub = tubVec.clone().applyAxisAngle(new THREE.Vector3(0, 0, 1), (r+1)*radAng);
 
-			var nextRad = new THREE.Vector3(radius*Math.cos((r+1)*radAng+Math.PI/2), radius*ratio*Math.sin((r+1)*radAng+Math.PI/2), 0);
+			var nextRad = new THREE.Vector3(radius*Math.cos((r+1)*radAng+Math.PI/2), radius*window.ratio*Math.sin((r+1)*radAng+Math.PI/2), 0);
 			var nextTub = nextRad.clone().normalize().multiplyScalar(thickness);
 			var nextStrech = strechVec.clone().add(new THREE.Vector3(0, 0, extra.stride*Math.cos((r+1)*radAng)));
 
