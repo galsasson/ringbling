@@ -2,8 +2,8 @@ Ring = function()
 {
 	THREE.Object3D.call(this);
 
-	this.radius = 10;
-	this.thickness = 2;
+	this.radius = 14;
+	this.thickness = 1;
 	this.radialSegments = 64;
 	this.tubularSegments = 128;
 	this.flaten = 0;
@@ -16,8 +16,8 @@ Ring = function()
 	this.extra.freq = 0;
 	this.extra.clamp = false;
 	this.extra.stride = 0;
-	this.extra.flatten = true;
-	this.extra.trueTubOrientation = true;
+	this.extra.flatten = false;
+	this.extra.trueTubOrientation = false;
 }
 Ring.prototype = Object.create(THREE.Object3D.prototype);
 
@@ -66,9 +66,11 @@ Ring.prototype.RingGeometry = function(radius, thickness, radialSegments, tubula
 			radOsc=0;
 		}
 		time+=extra.freq*radAng;
+		// var rad = radVec.clone().multiplyScalar(1+radOsc).applyAxisAngle(new THREE.Vector3(0, 0, 1), r*radAng); // rad for circle
+		// var tub = tubVec.clone().applyAxisAngle(new THREE.Vector3(0, 0, 1), r*radAng);
 
-		var rad = radVec.clone().multiplyScalar(1+radOsc).applyAxisAngle(new THREE.Vector3(0, 0, 1), r*radAng);
-		var tub = tubVec.clone().applyAxisAngle(new THREE.Vector3(0, 0, 1), r*radAng);
+		var rad = new THREE.Vector3(radius*Math.cos(r*radAng+Math.PI/2), radius*ratio*Math.sin(r*radAng+Math.PI/2), 0);
+		var tub = rad.clone().normalize().multiplyScalar(thickness);
 		var strech = strechVec.clone().add(new THREE.Vector3(0, 0, extra.stride*Math.cos(r*radAng)));
 
 		if (extra.trueTubOrientation) {
@@ -76,14 +78,17 @@ Ring.prototype.RingGeometry = function(radius, thickness, radialSegments, tubula
 			if (extra.clamp && nextRadOsc<0) {
 				nextRadOsc=0;
 			}
-			var nextRad = radVec.clone().multiplyScalar(1+nextRadOsc).applyAxisAngle(new THREE.Vector3(0, 0, 1), (r+1)*radAng);
-			var nextTub = tubVec.clone().applyAxisAngle(new THREE.Vector3(0, 0, 1), (r+1)*radAng);
+			// var nextRad = radVec.clone().multiplyScalar(1+nextRadOsc).applyAxisAngle(new THREE.Vector3(0, 0, 1), (r+1)*radAng);  // rad for circle
+			// var nextTub = tubVec.clone().applyAxisAngle(new THREE.Vector3(0, 0, 1), (r+1)*radAng);
+
+			var nextRad = new THREE.Vector3(radius*Math.cos((r+1)*radAng+Math.PI/2), radius*ratio*Math.sin((r+1)*radAng+Math.PI/2), 0);
+			var nextTub = nextRad.clone().normalize().multiplyScalar(thickness);
 			var nextStrech = strechVec.clone().add(new THREE.Vector3(0, 0, extra.stride*Math.cos((r+1)*radAng)));
 
 			var rotAxis = nextStrech.add(nextRad).sub(nextTub).sub(strech.clone().add(rad).sub(tub)).normalize();
 		}
 		else {
-			var rotAxis = tub.clone().applyAxisAngle(new THREE.Vector3(0, 0, 1), 0.5*Math.PI).normalize();
+			var rotAxis = rad.clone().normalize().applyAxisAngle(new THREE.Vector3(0, 0, 1), Math.PI/2);
 		}
 
 		for (var t=0; t<tubularSegments; t++)
