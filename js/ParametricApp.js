@@ -271,7 +271,7 @@ function ParametricApp() {
             nextViewAngle();
         }
         else if (keyCode == 85) {   // 'u'
-
+            ring.mergeNew();
         }
     }
 

@@ -24,7 +24,6 @@ RingBling.prototype.init = function()
 	this.add(this.ringl);
 	this.add(this.ringr);
 	this.align();
-	// this.merge();
 }
 
 RingBling.prototype.updateGeometry = function(that)
@@ -33,7 +32,6 @@ RingBling.prototype.updateGeometry = function(that)
 	that.ringr.updateGeometry(that.ringr);
 
 	that.align();
-	// that.merge();
 }
 
 RingBling.prototype.align = function()
@@ -51,8 +49,9 @@ RingBling.prototype.align = function()
 
 RingBling.prototype.merge = function()
 {
+	// var csg = new THREE.CSG();
 	console.log("ringl_bsp");
-	var ringl_bsp = new ThreeBSP( this.ringl );
+	var ringl_bsp = THREE.CSG.toCSG( this.ringl );
 	console.log("ringr_bsp");
 	var ringr_bsp = new ThreeBSP( this.ringr );
 
@@ -61,6 +60,24 @@ RingBling.prototype.merge = function()
 	console.log("result mesh");
 	var result = union_bsp.toMesh( ResMgr.materials.object );
 	result.geometry.computeVertexNormals();
+	this.add( result );
+}
+
+RingBling.prototype.mergeNew = function()
+{
+	// var csg = new THREE.CSG();
+	console.log("ringl_bsp");
+	var ringl_bsp = new ThreeBSP( this.ringl.mesh );
+	console.log("ringr_bsp");
+	var ringr_bsp = new ThreeBSP( this.ringr.mesh);
+
+	console.log("union_bsp");
+	var union_bsp = ringl_bsp.union( ringr_bsp );
+	console.log("result mesh");
+	var result = union_bsp.toMesh( resMgr.materials.object );
+	result.geometry.computeVertexNormals();
+	result.position.applyMatrix4(new THREE.Matrix4().getInverse(this.matrixWorld));
+	result.position.add(new THREE.Vector3(0, 30, 0));
 	this.add( result );
 }
 

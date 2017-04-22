@@ -4,9 +4,9 @@ Ring = function()
 
 	this.height = 14;
 	this.width = 12;
-	this.thickness = 1.8;
-	this.radialSegments = 64;
-	this.tubularSegments = 128;
+	this.thickness = 2;
+	this.radialSegments = 128;
+	this.tubularSegments = 32;
 	this.flaten = 0;
 	this.showFaces = true;
 	this.showFaceMovement = true;
@@ -19,7 +19,7 @@ Ring = function()
 	this.extra.stride = 0;
 	this.extra.flatten = false;
 	this.extra.trueTubOrientation = false;
-	this.extra.flattenX = 0.2;
+	this.extra.flattenX = 0.6;
 }
 Ring.prototype = Object.create(THREE.Object3D.prototype);
 
