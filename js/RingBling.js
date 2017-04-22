@@ -11,11 +11,11 @@ RingBling.prototype = Object.create(THREE.Object3D.prototype);
 RingBling.prototype.init = function()
 {
 	this.ringl = new Ring();
-	this.ringl.stride = -30;
+	this.ringl.radius = 8.5;
 	this.ringl.material = resMgr.materials.ringl;
 	this.ringl.init();
 	this.ringr = new Ring();
-	this.ringr.stride = 30;
+	this.ringr.radius = 10.5;
 	this.ringr.material = resMgr.materials.ringr;
 	this.ringr.init();
 	this.add(this.ringl);
@@ -35,8 +35,10 @@ RingBling.prototype.align = function()
 {
 	// put rings end to end
 	var offtby2 = this.ringsOffset/2;
-	this.ringl.position.set(0, 0, this.ringl.stride/2+offtby2);
-	this.ringr.position.set(0, this.ringr.radius-this.ringl.radius, this.ringr.stride/2-offtby2);
+	this.ringl.rotation.set(-Math.PI/4, 0, 0);
+	this.ringr.rotation.set(Math.PI/4, 0, 0);
+	this.ringl.position.set(0, -25+this.ringl.radius*ratio*Math.sin(Math.PI/4), -this.ringl.radius*ratio*Math.cos(Math.PI/4));
+	this.ringr.position.set(0, -25+this.ringr.radius*ratio*Math.sin(Math.PI/4), this.ringr.radius*ratio*Math.cos(Math.PI/4));
 }
 
 

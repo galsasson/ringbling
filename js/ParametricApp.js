@@ -1,3 +1,13 @@
+/* Constants */
+var ratio = 1.138;
+
+
+
+
+
+
+
+
 var renderer = null;
 var scene = null;
 
