@@ -153,7 +153,8 @@ function ParametricApp() {
         ringG.add(ring.ringr, 'radialSegments', 1, 100).onChange(function() {ring.updateGeometry(ring)});
         ringG.add(ring.ringr, 'tubularSegments', 1, 300).onChange(function() {ring.updateGeometry(ring)});
         ringG.add(ring.ringr.extra, 'stride', 0, 20).onChange(function() {ring.updateGeometry(ring)});
-        ringG.add(ring.ringr.extra, 'flatten', 0, 1).onChange(function() {ring.updateGeometry(ring)});
+        ringG.add(ring.ringr.extra, 'flattenSides', 0, 1).onChange(function() {ring.updateGeometry(ring)});
+        ringG.add(ring.ringr.extra, 'flattenTop', 0, 1).onChange(function() {ring.updateGeometry(ring)});
         ringG.add(ring.ringr.extra, 'flattenAngle', 0, Math.PI*2).onChange(function() {ring.updateGeometry(ring)});
         ringG.add(ring.ringr.extra, 'trueTubOrientation').onChange(function() {ring.updateGeometry(ring)});
         var style = ringG.addFolder("Style");
@@ -168,7 +169,8 @@ function ParametricApp() {
         ringGL.add(ring.ringl, 'radialSegments', 1, 100).onChange(function() {ring.updateGeometry(ring)});
         ringGL.add(ring.ringl, 'tubularSegments', 1, 300).onChange(function() {ring.updateGeometry(ring)});
         ringGL.add(ring.ringl.extra, 'stride', -20, 0).onChange(function() {ring.updateGeometry(ring)});
-        ringGL.add(ring.ringl.extra, 'flatten', 0, 1).onChange(function() {ring.updateGeometry(ring)});
+        ringGL.add(ring.ringl.extra, 'flattenSides', 0, 1).onChange(function() {ring.updateGeometry(ring)});
+        ringGL.add(ring.ringl.extra, 'flattenTop', 0, 1).onChange(function() {ring.updateGeometry(ring)});
         ringGL.add(ring.ringl.extra, 'flattenAngle', 0, Math.PI*2).onChange(function() {ring.updateGeometry(ring)});
         ringGL.add(ring.ringl.extra, 'trueTubOrientation').onChange(function() {ring.updateGeometry(ring)});
         style = ringGL.addFolder("Style");

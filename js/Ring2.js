@@ -17,7 +17,8 @@ Ring = function()
 	this.extra.freq = 0;
 	this.extra.clamp = false;
 	this.extra.stride = 0;
-	this.extra.flatten = 0.5;
+	this.extra.flattenSides = 0.6;
+	this.extra.flattenTop = 0.6;
 	this.extra.flattenAngle = 0;
 	this.extra.trueTubOrientation = false;
 }
@@ -101,8 +102,8 @@ Ring.prototype.RingGeometry = function(width, height, thickness, radialSegments,
 		for (var t=0; t<tubularSegments; t++)
 		{
 			var tubShell = tub.clone().applyAxisAngle(rotAxis, t*tubAng);
-			tubShell.x *= extra.flatten;
-			tubShell.y *= map(Math.sin(r*radAng/2), 0, 1, extra.flatten, 1, true);
+			tubShell.x *= map(Math.abs(Math.sin(r*radAng)), 0, 1, 1, extra.flattenSides, true);
+			tubShell.y *= map(Math.sin(r*radAng/2), 0, 1, extra.flattenTop, 1, true);
 			tubShell.applyAxisAngle(new THREE.Vector3(1, 0, 0), extra.flattenAngle);
 
 
