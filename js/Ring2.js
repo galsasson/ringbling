@@ -4,7 +4,7 @@ Ring = function()
 
 	this.height = 14;
 	this.width = 12;
-	this.thickness = 1;
+	this.thickness = 1.8;
 	this.radialSegments = 64;
 	this.tubularSegments = 128;
 	this.flaten = 0;
@@ -51,8 +51,8 @@ Ring.prototype.RingGeometry = function(width, height, thickness, radialSegments,
 	tubularSegments = Math.floor( tubularSegments ) || 6;
 	arc = arc || Math.PI * 2;
 
-	var hby2 = height/2;
-	var wby2 = width/2;
+	var hby2 = (height+thickness)/2;
+	var wby2 = (width+thickness)/2;
 	var radAng = arc/radialSegments;
 	var tubAng = Math.PI*2 / tubularSegments;
 	//var radVec = new THREE.Vector3(0, radius, 0);

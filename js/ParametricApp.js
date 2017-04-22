@@ -144,6 +144,7 @@ function ParametricApp() {
         lightG.add(spotLight, 'intensity', 0, 4);
 
         gui.add(ring, 'ringsOffset', -6, 0).onChange(function() {ring.updateGeometry(ring)});
+        gui.add(ring, 'angle', 0, Math.PI/2).onChange(function() {ring.updateGeometry(ring)});
 
         var ringG = gui.addFolder("RIGHT RING");
         ringG.add(ring.ringr, 'width', 0, 30).onChange(function() {ring.updateGeometry(ring)});
@@ -268,6 +269,9 @@ function ParametricApp() {
         else if (keyCode == 65) {   // 'a'
             nextClip();
             nextViewAngle();
+        }
+        else if (keyCode == 85) {   // 'u'
+
         }
     }
 

@@ -3,6 +3,7 @@ RingBling = function()
 	THREE.Object3D.call(this);
 
 	this.ringsOffset = 0;
+	this.angle = Math.PI/4;
 	this.ringl = null;
 	this.ringr = null;
 }
@@ -23,6 +24,7 @@ RingBling.prototype.init = function()
 	this.add(this.ringl);
 	this.add(this.ringr);
 	this.align();
+	// this.merge();
 }
 
 RingBling.prototype.updateGeometry = function(that)
@@ -31,16 +33,35 @@ RingBling.prototype.updateGeometry = function(that)
 	that.ringr.updateGeometry(that.ringr);
 
 	that.align();
+	// that.merge();
 }
 
 RingBling.prototype.align = function()
 {
 	// put rings end to end
-	this.ringl.rotation.set(-Math.PI/4, 0, 0);
-	this.ringr.rotation.set(Math.PI/4, 0, 0);
+	this.ringl.rotation.set(-this.angle, 0, 0);
+	this.ringr.rotation.set(this.angle, 0, 0);
 
-	this.ringl.position.set(0, 0.5*this.ringl.height*Math.sin(Math.PI/4), -0.5*this.ringl.height*Math.cos(Math.PI/4));
-	this.ringr.position.set(0, 0.5*this.ringr.height*Math.sin(Math.PI/4), 0.5*this.ringr.height*Math.cos(Math.PI/4)+this.ringsOffset);
+	var lheight = this.ringl.height+this.ringl.thickness;
+	var rheight = this.ringr.height+this.ringr.thickness;
+
+	this.ringl.position.set(0, 0.5*lheight*Math.sin(this.angle), -0.5*lheight*Math.sin(this.angle));
+	this.ringr.position.set(0, 0.5*rheight*Math.sin(this.angle), 0.5*rheight*Math.sin(this.angle)+this.ringsOffset);
+}
+
+RingBling.prototype.merge = function()
+{
+	console.log("ringl_bsp");
+	var ringl_bsp = new ThreeBSP( this.ringl );
+	console.log("ringr_bsp");
+	var ringr_bsp = new ThreeBSP( this.ringr );
+
+	console.log("union_bsp");
+	var union_bsp = ringl_bsp.union( ringr_bsp );
+	console.log("result mesh");
+	var result = union_bsp.toMesh( ResMgr.materials.object );
+	result.geometry.computeVertexNormals();
+	this.add( result );
 }
 
 
