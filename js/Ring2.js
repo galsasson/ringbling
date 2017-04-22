@@ -17,9 +17,9 @@ Ring = function()
 	this.extra.freq = 0;
 	this.extra.clamp = false;
 	this.extra.stride = 0;
-	this.extra.flatten = false;
+	this.extra.flatten = 0.5;
+	this.extra.flattenAngle = 0;
 	this.extra.trueTubOrientation = false;
-	this.extra.flattenX = 0.6;
 }
 Ring.prototype = Object.create(THREE.Object3D.prototype);
 
@@ -101,7 +101,10 @@ Ring.prototype.RingGeometry = function(width, height, thickness, radialSegments,
 		for (var t=0; t<tubularSegments; t++)
 		{
 			var tubShell = tub.clone().applyAxisAngle(rotAxis, t*tubAng);
-			tubShell.x *= extra.flattenX;//*Math.cos(r*radAng);
+			tubShell.x *= extra.flatten;
+			tubShell.y *= extra.flatten;
+			tubShell.applyAxisAngle(new THREE.Vector3(1, 0, 0), extra.flattenAngle);
+
 
 			var vert = rad.clone().add(tubShell);
 			geo.vertices.push(new THREE.Vector3(vert.x, vert.y, vert.z));
@@ -117,17 +120,17 @@ Ring.prototype.RingGeometry = function(width, height, thickness, radialSegments,
 	}
 
 
-	if (extra.flatten) {
-		// flatten below radius
-		geo.vertices.forEach(function(item, index) {
-			var item2d = new THREE.Vector3(item.x, item.y, 0);
-			if (zero.distanceTo(item2d) < radius) {
-				item2d.setLength(radius);
-				item.x = item2d.x;
-				item.y = item2d.y;
-			}
-		});
-	}
+	// if (extra.flattenBool) {
+	// 	// flatten below radius
+	// 	geo.vertices.forEach(function(item, index) {
+	// 		var item2d = new THREE.Vector3(item.x, item.y, 0);
+	// 		if (zero.distanceTo(item2d) < radius) {
+	// 			item2d.setLength(radius);
+	// 			item.x = item2d.x;
+	// 			item.y = item2d.y;
+	// 		}
+	// 	});
+	// }
 
 	geo.computeFaceNormals();
 	// geo.computeVertexNormals();
