@@ -18,7 +18,7 @@
     <script src="js/RingBling.js"></script>
     <link href='http://fonts.googleapis.com/css?family=Alegreya+Sans+SC' rel='stylesheet' type='text/css'>
     <link href='styles.css' rel='stylesheet' type='text/css'>
-    <link rel="icon" type="image/ico" href="/favicon.ico" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
   </head>
   <body>
     <header>
