@@ -1,509 +1,521 @@
-var renderer = null;
-var scene = null;
+function ParametricApp() {
+    var renderer = null;
+    var scene = null;
 
-var controls = null;
-var camera = null;
+    var controls = null;
+    var camera = null;
 
-var clock = null;
+    var clock = null;
 
-var animating = true;
+    var animating = true;
 
-var resMgr = null;
+    window.resMgr = null;
 
-var keyPressed = [];
+    var keyPressed = [];
 
-var exporter = {};
+    var exporter = {};
 
-var ring = null;
+    var ring = null;
 
-var spotLight;
+    var spotLight;
 
-var pressedObjects = [];
+    var pressedObjects = [];
 
-var reversedScale = 1;
+    var reversedScale = 1;
 
-var highRes = true;
+    var highRes = true;
 
-var camAngles = [{'x': -156, 'y':87, 'z':605, 'tx':45.5, 'ty':69.9, 'tz':483.5},
-                 {'x': 1173.9, 'y':236.6, 'z':1538.5, 'tx':107.2, 'ty':109.7, 'tz':223.7},
-                 {'x': 426.9, 'y':178.8, 'z':70.3, 'tx':0, 'ty':80, 'tz':500},
-                 {'x': -871.9, 'y':576.4, 'z':1625.6, 'tx':55.8, 'ty':104, 'tz':172.9}
-                 ];
-var camPosTarget = null;
-var camTargetTarget = null;
-//***************************************************************************//
-// initialize the renderer, scene, camera, and lights                        //
-//***************************************************************************//
-function onLoad()
-{
-    // Grab our container div
-    var container = document.getElementById("container");
-
-    // Create the Three.js renderer, add it to our div
-    renderer = new THREE.WebGLRenderer( { antialias: true } );
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor(0);
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMapSoft = true;
-    container.appendChild( renderer.domElement );
-
-    // Create a new Three.js scene
-    scene = new THREE.Scene();
-
-    // Put in a camera
-    camera = new THREE.PerspectiveCamera( 20,
-        window.innerWidth / window.innerHeight, 1, 10000 );
-
-    camera.position.set(camAngles[0].x, camAngles[0].y, camAngles[0].z);
-    controls = new THREE.OrbitControls(camera);
-    controls.addEventListener( 'change', render );
-    // console.log(controls);
-    controls.target.set(camAngles[0].tx, camAngles[0].ty, camAngles[0].tz);
-
-    // add lights
-    initSceneLights();
-
-    // load resources (after all resouces will load, calls populateScene)
-    // loadResources(populateScene);
-    loadResources(function (){});
-    populateScene();
-
-    // Add a mouse up handler to toggle the animation
-    addInputHandler();
-    window.addEventListener( 'resize', onWindowResize, false );
-
-    // add gui
-    addGui();
-
-    clock = new THREE.Clock();
-
-    // init keyPressed
-    for (var i=0; i<255; i++)
+    var camAngles = [{'x': -156, 'y':87, 'z':605, 'tx':45.5, 'ty':69.9, 'tz':483.5},
+                     {'x': 1173.9, 'y':236.6, 'z':1538.5, 'tx':107.2, 'ty':109.7, 'tz':223.7},
+                     {'x': 426.9, 'y':178.8, 'z':70.3, 'tx':0, 'ty':80, 'tz':500},
+                     {'x': -871.9, 'y':576.4, 'z':1625.6, 'tx':55.8, 'ty':104, 'tz':172.9}
+                     ];
+    var camPosTarget = null;
+    var camTargetTarget = null;
+    var modelWidth = window.innerWidth;
+    var modelHeight = window.innerHeight;
+    //***************************************************************************//
+    // initialize the renderer, scene, camera, and lights                        //
+    //***************************************************************************//
+    function loadModel(id, width, height, showGUI)
     {
-        keyPressed[i] = false;
+        // Grab our container div
+        var container = document.getElementById(id);
+        modelWidth = width;
+        modelHeight = height;
+        // Create the Three.js renderer, add it to our div
+        renderer = new THREE.WebGLRenderer( { antialias: true, alpha:true } );
+        renderer.setSize(width, height);
+        renderer.setClearColor(0xffffff, 0);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMapSoft = true;
+        container.appendChild( renderer.domElement );
+
+        // Create a new Three.js scene
+        scene = new THREE.Scene();
+
+        // Put in a camera
+        camera = new THREE.PerspectiveCamera( 20,
+            width / height, 1, 10000 );
+
+        camera.position.set(camAngles[0].x, camAngles[0].y, camAngles[0].z);
+        controls = new THREE.OrbitControls(camera, container);
+        controls.addEventListener( 'change', render );
+        // console.log(controls);
+        controls.target.set(camAngles[0].tx, camAngles[0].ty, camAngles[0].tz);
+
+        // add lights
+        initSceneLights();
+
+        // load resources (after all resouces will load, calls populateScene)
+        // loadResources(populateScene);
+        loadResources(function (){});
+        populateScene();
+
+        // Add a mouse up handler to toggle the animation
+        addInputHandler();
+        window.addEventListener( 'resize', onWindowResize, false );
+
+        // add gui
+        if (showGUI) {
+            addGui();
+        }
+
+        clock = new THREE.Clock();
+
+        // init keyPressed
+        for (var i=0; i<255; i++)
+        {
+            keyPressed[i] = false;
+        }
+
+        // Run our render loop
+    	run();
     }
 
-    // Run our render loop
-	run();
-}
+    function loadResources(whenFinished)
+    {
+        window.resMgr = new ResourceManager();
+        window.resMgr.initMaterials();
+        window.resMgr.loadResources(whenFinished);
+    }
 
-function loadResources(whenFinished)
-{
-    resMgr = new ResourceManager();
-    resMgr.initMaterials();
-    resMgr.loadResources(whenFinished);
-}
+    //***************************************************************************//
+    // Populate the scene with lights                                            //
+    //***************************************************************************//
+    function initSceneLights()
+    {
+        // Create an ambient and a directional light to show off the object
+        // var dirLight = [];
+        var ambLight = new THREE.AmbientLight( 0x333333 ); // soft white light
+        scene.add( ambLight );
 
-//***************************************************************************//
-// Populate the scene with lights                                            //
-//***************************************************************************//
-function initSceneLights()
-{
-    // Create an ambient and a directional light to show off the object
-    // var dirLight = [];
-    var ambLight = new THREE.AmbientLight( 0x333333 ); // soft white light
-    scene.add( ambLight );
+        // object spotlight
+        spotLight = new THREE.SpotLight(0xFFFFFF, 1);
+        spotLight.angle = Math.PI/2;
+        spotLight.exponent = 12;
+        spotLight.position.set(-200, 337, 1015);
+        spotLight.target.position.set(-98, 82, 522);
+        spotLight.castShadow = true;
+        spotLight.shadow.camera.far = 1500;
+        // spotLight.shadowCameraVisible = true;
+        scene.add(spotLight);
 
-    // object spotlight
-    spotLight = new THREE.SpotLight(0xFFFFFF, 1);
-    spotLight.angle = Math.PI/2;
-    spotLight.exponent = 12;
-    spotLight.position.set(-200, 337, 1015);
-    spotLight.target.position.set(-98, 82, 522);
-    spotLight.castShadow = true;
-    spotLight.shadow.camera.far = 1500;
-    // spotLight.shadowCameraVisible = true;
-    scene.add(spotLight);
+        // screen spotlight
+        /*
+        screenLight = new THREE.SpotLight(0x000000, 3.5);
+        screenLight.angle = 0.27;
+        screenLight.exponent = 103;
+        screenLight.position.set(0, 361, -1691);
+        screenLight.target.position.set(0, -100, 800);
+        scene.add(screenLight);
 
-    // screen spotlight
+
+
+        var spot2 = new THREE.SpotLight(0xffffff, 0.2);
+        spot2.angle = Math.PI/2;
+        spot2.exponent = 50;
+        spot2.position.set(0, 2000, 200);
+        spot2.target.position.set(0, 0, 200);
+        scene.add(spot2);
+        */
+    }
+
+    //***************************************************************************//
+    // Populate the scene object with our objects                                //
+    //***************************************************************************//
+    function populateScene()
+    {
+        ring = new RingBling();
+        ring.init();
+        // ring.rotation.x = Math.PI/2;
+        ring.position.set(camAngles[0].tx, camAngles[0].ty, camAngles[0].tz);
+        scene.add(ring);
+    }
+
+    function addGui()
+    {
+        var gui = new dat.GUI();
+        var lightG = gui.addFolder("LIGHT");
+        lightG.add(spotLight, 'exponent', 0, 90);
+        lightG.add(spotLight, 'intensity', 0, 4);
+
+        gui.add(ring, 'ringsOffset', -20, 20).onChange(function() {ring.updateGeometry(ring)});
+
+        var ringG = gui.addFolder("RIGHT RING");
+        ringG.add(ring.ringr, 'radius', 0, 30).onChange(function() {ring.updateGeometry(ring)});
+        ringG.add(ring.ringr, 'thickness', 0, 6).onChange(function() {ring.updateGeometry(ring)});
+        ringG.add(ring.ringr, 'radialSegments', 1, 100).onChange(function() {ring.updateGeometry(ring)});
+        ringG.add(ring.ringr, 'tubularSegments', 1, 300).onChange(function() {ring.updateGeometry(ring)});
+        ringG.add(ring.ringr.extra, 'stride', 0, 20).onChange(function() {ring.updateGeometry(ring)});
+        ringG.add(ring.ringr.extra, 'flatten').onChange(function() {ring.updateGeometry(ring)});
+        ringG.add(ring.ringr.extra, 'trueTubOrientation').onChange(function() {ring.updateGeometry(ring)});
+        var style = ringG.addFolder("Style");
+        style.add(ring.ringr.extra, 'freq', 0, 20).onChange(function() {ring.updateGeometry(ring)});
+        style.add(ring.ringr.extra, 'mag', 0, 1).onChange(function() {ring.updateGeometry(ring)});
+        style.add(ring.ringr.extra, 'clamp').onChange(function() {ring.updateGeometry(ring)});
+
+        var ringGL = gui.addFolder("LEFT RING");
+        ringGL.add(ring.ringl, 'radius', 0, 30).onChange(function() {ring.updateGeometry(ring)});
+        ringGL.add(ring.ringl, 'thickness', 0, 6).onChange(function() {ring.updateGeometry(ring)});
+        ringGL.add(ring.ringl, 'radialSegments', 1, 100).onChange(function() {ring.updateGeometry(ring)});
+        ringGL.add(ring.ringl, 'tubularSegments', 1, 300).onChange(function() {ring.updateGeometry(ring)});
+        ringGL.add(ring.ringl.extra, 'stride', -20, 0).onChange(function() {ring.updateGeometry(ring)});
+        ringGL.add(ring.ringl.extra, 'flatten').onChange(function() {ring.updateGeometry(ring)});
+        ringGL.add(ring.ringl.extra, 'trueTubOrientation').onChange(function() {ring.updateGeometry(ring)});
+        style = ringGL.addFolder("Style");
+        style.add(ring.ringl.extra, 'freq', 0, 20).onChange(function() {ring.updateGeometry(ring)});
+        style.add(ring.ringl.extra, 'mag', 0, 1).onChange(function() {ring.updateGeometry(ring)});
+        style.add(ring.ringl.extra, 'clamp').onChange(function() {ring.updateGeometry(ring)});
     /*
-    screenLight = new THREE.SpotLight(0x000000, 3.5);
-    screenLight.angle = 0.27;
-    screenLight.exponent = 103;
-    screenLight.position.set(0, 361, -1691);
-    screenLight.target.position.set(0, -100, 800);
-    scene.add(screenLight);
+        var f4 = f1.addFolder('EYE GEOMETRY');
+        f4.add(genome, 'eyeRadius', 0, 10).onChange(onGeometryChanged);
+        f4.add(genome, 'eyeLidRadius', 0, 13).onChange(onGeometryChanged);
+        f4.add(genome, 'topLidAngle', 0, 2*Math.PI).onChange(onGeometryChanged);
+        f4.add(genome, 'bottomLidAngle', 0, 2*Math.PI).onChange(onGeometryChanged);
 
+        var f2 = gui.addFolder('TENTACLE GEOMETRY');
+        f2.add(genome, 'tentBaseRadius', 0, 20).onChange(onGeometryChanged);
+        f2.add(genome, 'numTents', 0, 32).onChange(onGeometryChanged);
+        f2.add(genome, 'numJoints', 0, 50).onChange(onGeometryChanged);
 
+        tmpF = f2.addFolder('Joint Scale Vector');
+        tmpF.add(genome.jointScaleVector, 'x', 0.7, 1.3).onChange(onGeometryChanged);
+        tmpF.add(genome.jointScaleVector, 'y', 0.7, 1.3).onChange(onGeometryChanged);
+        tmpF.add(genome.jointScaleVector, 'z', 0.7, 1.3).onChange(onGeometryChanged);
+        f2.add(genome, 'numSpikesPerJoint', 0, 10).onChange(onGeometryChanged);
+        f2.add(genome, 'spikesArcStart', 0.0, 2*Math.PI).onChange(onGeometryChanged);
+        f2.add(genome, 'spikesArcEnd', 0.0, 2*Math.PI).onChange(onGeometryChanged);
+        tmpF = f2.addFolder("Spike Scale Vector");
+        tmpF.add(genome.spikeScale, 'x', 0.7, 1.3).onChange(onGeometryChanged);
+        tmpF.add(genome.spikeScale, 'y', 0.7, 1.3).onChange(onGeometryChanged);
+        tmpF.add(genome.spikeScale, 'z', 0.7, 1.3).onChange(onGeometryChanged);
+        f2.add(genome, 'tentColorInc', 0, 10).onChange(onGeometryChanged);
+        f2.add(genome, 'tentColorBW').onChange(onGeometryChanged);
 
-    var spot2 = new THREE.SpotLight(0xffffff, 0.2);
-    spot2.angle = Math.PI/2;
-    spot2.exponent = 50;
-    spot2.position.set(0, 2000, 200);
-    spot2.target.position.set(0, 0, 200);
-    scene.add(spot2);
+        var f3 = gui.addFolder('ANIMATION');
+        f3.add(genome, 'tentFactor1', 0, 100);
+        f3.add(genome, 'tentFactor2', 0, 50);
+        f3.add(genome, 'tentFactor3', 0, 50);
+        f3.add(genome, 'tentFactor4', 0, 50);
+
+        var f5 = gui.addFolder('GEOMETRY DETAILS');
+        f5.add(genome, 'sphereDetail', 0, 40).onChange(onGeometryChanged);
+        f5.add(genome, 'cylinderDetail', 0, 40).onChange(onGeometryChanged);
+        f5.add(genome, 'eyeDetails', 0, 20).onChange(onGeometryChanged);
     */
-}
+    }
 
-//***************************************************************************//
-// Populate the scene object with our objects                                //
-//***************************************************************************//
-function populateScene()
-{
-    ring = new RingBling();
-    ring.init();
-    // ring.rotation.x = Math.PI/2;
-    ring.position.set(camAngles[0].tx, camAngles[0].ty, camAngles[0].tz);
-    scene.add(ring);
-}
+    //***************************************************************************//
+    // render loop                                                               //
+    //***************************************************************************//
 
-function addGui()
-{
-    var gui = new dat.GUI();
-    var lightG = gui.addFolder("LIGHT");
-    lightG.add(spotLight, 'exponent', 0, 90);
-    lightG.add(spotLight, 'intensity', 0, 4);
-
-    gui.add(ring, 'ringsOffset', -20, 20).onChange(function() {ring.updateGeometry(ring)});
-
-    var ringG = gui.addFolder("RIGHT RING");
-    ringG.add(ring.ringr, 'radius', 0, 30).onChange(function() {ring.updateGeometry(ring)});
-    ringG.add(ring.ringr, 'thickness', 0, 6).onChange(function() {ring.updateGeometry(ring)});
-    ringG.add(ring.ringr, 'radialSegments', 1, 100).onChange(function() {ring.updateGeometry(ring)});
-    ringG.add(ring.ringr, 'tubularSegments', 1, 300).onChange(function() {ring.updateGeometry(ring)});
-    ringG.add(ring.ringr.extra, 'stride', 0, 20).onChange(function() {ring.updateGeometry(ring)});
-    ringG.add(ring.ringr.extra, 'flatten').onChange(function() {ring.updateGeometry(ring)});
-    ringG.add(ring.ringr.extra, 'trueTubOrientation').onChange(function() {ring.updateGeometry(ring)});
-    var style = ringG.addFolder("Style");
-    style.add(ring.ringr.extra, 'freq', 0, 20).onChange(function() {ring.updateGeometry(ring)});
-    style.add(ring.ringr.extra, 'mag', 0, 1).onChange(function() {ring.updateGeometry(ring)});
-    style.add(ring.ringr.extra, 'clamp').onChange(function() {ring.updateGeometry(ring)});
-
-    var ringGL = gui.addFolder("LEFT RING");
-    ringGL.add(ring.ringl, 'radius', 0, 30).onChange(function() {ring.updateGeometry(ring)});
-    ringGL.add(ring.ringl, 'thickness', 0, 6).onChange(function() {ring.updateGeometry(ring)});
-    ringGL.add(ring.ringl, 'radialSegments', 1, 100).onChange(function() {ring.updateGeometry(ring)});
-    ringGL.add(ring.ringl, 'tubularSegments', 1, 300).onChange(function() {ring.updateGeometry(ring)});
-    ringGL.add(ring.ringl.extra, 'stride', -20, 0).onChange(function() {ring.updateGeometry(ring)});
-    ringGL.add(ring.ringl.extra, 'flatten').onChange(function() {ring.updateGeometry(ring)});
-    ringGL.add(ring.ringl.extra, 'trueTubOrientation').onChange(function() {ring.updateGeometry(ring)});
-    style = ringGL.addFolder("Style");
-    style.add(ring.ringl.extra, 'freq', 0, 20).onChange(function() {ring.updateGeometry(ring)});
-    style.add(ring.ringl.extra, 'mag', 0, 1).onChange(function() {ring.updateGeometry(ring)});
-    style.add(ring.ringl.extra, 'clamp').onChange(function() {ring.updateGeometry(ring)});
-/*
-    var f4 = f1.addFolder('EYE GEOMETRY');
-    f4.add(genome, 'eyeRadius', 0, 10).onChange(onGeometryChanged);
-    f4.add(genome, 'eyeLidRadius', 0, 13).onChange(onGeometryChanged);
-    f4.add(genome, 'topLidAngle', 0, 2*Math.PI).onChange(onGeometryChanged);
-    f4.add(genome, 'bottomLidAngle', 0, 2*Math.PI).onChange(onGeometryChanged);
-
-    var f2 = gui.addFolder('TENTACLE GEOMETRY');
-    f2.add(genome, 'tentBaseRadius', 0, 20).onChange(onGeometryChanged);
-    f2.add(genome, 'numTents', 0, 32).onChange(onGeometryChanged);
-    f2.add(genome, 'numJoints', 0, 50).onChange(onGeometryChanged);
-
-    tmpF = f2.addFolder('Joint Scale Vector');
-    tmpF.add(genome.jointScaleVector, 'x', 0.7, 1.3).onChange(onGeometryChanged);
-    tmpF.add(genome.jointScaleVector, 'y', 0.7, 1.3).onChange(onGeometryChanged);
-    tmpF.add(genome.jointScaleVector, 'z', 0.7, 1.3).onChange(onGeometryChanged);
-    f2.add(genome, 'numSpikesPerJoint', 0, 10).onChange(onGeometryChanged);
-    f2.add(genome, 'spikesArcStart', 0.0, 2*Math.PI).onChange(onGeometryChanged);
-    f2.add(genome, 'spikesArcEnd', 0.0, 2*Math.PI).onChange(onGeometryChanged);
-    tmpF = f2.addFolder("Spike Scale Vector");
-    tmpF.add(genome.spikeScale, 'x', 0.7, 1.3).onChange(onGeometryChanged);
-    tmpF.add(genome.spikeScale, 'y', 0.7, 1.3).onChange(onGeometryChanged);
-    tmpF.add(genome.spikeScale, 'z', 0.7, 1.3).onChange(onGeometryChanged);
-    f2.add(genome, 'tentColorInc', 0, 10).onChange(onGeometryChanged);
-    f2.add(genome, 'tentColorBW').onChange(onGeometryChanged);
-
-    var f3 = gui.addFolder('ANIMATION');
-    f3.add(genome, 'tentFactor1', 0, 100);
-    f3.add(genome, 'tentFactor2', 0, 50);
-    f3.add(genome, 'tentFactor3', 0, 50);
-    f3.add(genome, 'tentFactor4', 0, 50);
-
-    var f5 = gui.addFolder('GEOMETRY DETAILS');
-    f5.add(genome, 'sphereDetail', 0, 40).onChange(onGeometryChanged);
-    f5.add(genome, 'cylinderDetail', 0, 40).onChange(onGeometryChanged);
-    f5.add(genome, 'eyeDetails', 0, 20).onChange(onGeometryChanged);
-*/
-}
-
-//***************************************************************************//
-// render loop                                                               //
-//***************************************************************************//
-
-function run()
-{
-    var deltaMS = clock.getDelta()*1000;
-
-    render();
-
-    if (animating)
+    function run()
     {
-        if (ring) {
-            ring.update();
+        var deltaMS = clock.getDelta()*1000;
+
+        render();
+
+        if (animating)
+        {
+            if (ring) {
+                ring.update();
+            }
         }
+
+        // change camera view angles
+        if (camPosTarget != null) {
+            camera.position.lerp(camPosTarget, 0.1);
+            if (camPosTarget.clone().sub(camera.position).length() < 0.1) {
+                camPosTarget = null;
+            }
+        }
+        if (camTargetTarget != null) {
+            controls.target.lerp(camTargetTarget, 0.1);
+            if (camTargetTarget.clone().sub(controls.target).length() < 0.1) {
+                camTargetTarget = null;
+            }
+        }
+
+        // Ask for another frame
+        requestAnimationFrame(run);
+        controls.update();
     }
 
-    // change camera view angles
-    if (camPosTarget != null) {
-        camera.position.lerp(camPosTarget, 0.1);
-        if (camPosTarget.clone().sub(camera.position).length() < 0.1) {
-            camPosTarget = null;
-        }
-    }
-    if (camTargetTarget != null) {
-        controls.target.lerp(camTargetTarget, 0.1);
-        if (camTargetTarget.clone().sub(controls.target).length() < 0.1) {
-            camTargetTarget = null;
-        }
-    }
-
-    // Ask for another frame
-    requestAnimationFrame(run);
-    controls.update();
-}
-
-// Render the scene
-function render()
-{
-    renderer.render(scene, camera);
-}
-
-//***************************************************************************//
-// User interaction                                                          //
-//***************************************************************************//
-function addInputHandler()
-{
-    var dom = renderer.domElement;
-    dom.addEventListener('mouseup', onMouseUp, false);
-    dom.addEventListener('mousedown', onMouseDown, false);
-    window.addEventListener('keydown', onKeyDown, false);
-    window.addEventListener('keyup', onKeyUp, false);
-}
-
-function onKeyDown(evt)
-{
-    var keyCode = getKeyCode(evt);
-    keyPressed[keyCode] = true;
-
-    console.log(keyCode);
-
-    if (keyCode == 32) {
-        if (animating) {
-            videoScreen.video.pause();
-        }
-        else {
-            videoScreen.video.play();
-        }
-        animating = !animating;
-    }
-    else if (keyCode >= 48 &&
-             keyCode < 48+camAngles.length) {
-        var angle = keyCode-48;
-        setCameraAngle(angle);
-    }
-    else if (keyCode == 67) // 'c'
+    // Render the scene
+    function render()
     {
-        console.log(camera.position);
-        console.log(controls.target);
-    }
-    else if (keyCode == 70) {   // 'f'
-        ring.toggleFaces();
-    }
-    else if (keyCode == 77) {   // 'm'
-        ring.toggleFaceMovement();
-    }
-    else if (keyCode == 82) {   // 'r'
-        resetObject();
-    }
-    else if (keyCode == 65) {   // 'a'
-        nextClip();
-        nextViewAngle();
-    }
-}
-
-function downloadModel()
-{
-    console.log("exporting stl");
-    ring.updateMatrixWorld(true);
-    exporter = new THREE.STLExporter();
-    var data = exporter.exportScene(ring);
-    download(data, "ringbling.stl", "application/sla");
-}
-
-var currentClip = 0;
-var currentViewAngle = 0;
-
-function nextClip()
-{
-    currentClip++;
-    if (currentClip >= 8) {
-        currentClip = 0;
+        renderer.render(scene, camera);
     }
 
-    if (videoScreen.on) {
-        setTimeout(screenToggle, 0);
-    }
-    setTimeout(resetObject, 200);
-    setTimeout(selectChannel, 400);
-    setTimeout(screenToggle, 600);
-    setTimeout(nextClip, remote.channels[currentClip].length + 5000);
-}
-
-function nextViewAngle()
-{
-    setTimeout(function() {setCameraAngle(0);}, 0);
-    setTimeout(function() {setCameraAngle(1);}, 20000);
-    setTimeout(function() {setCameraAngle(2);}, 40000);
-    setTimeout(function() {setCameraAngle(0);}, 50000);
-    setTimeout(function() {setCameraAngle(3);}, 60000);
-    setTimeout(nextViewAngle, 85000);
-}
-
-function setCameraAngle(angle)
-{
-    camPosTarget = new THREE.Vector3(camAngles[angle].x, camAngles[angle].y, camAngles[angle].z);
-    camTargetTarget = new THREE.Vector3(camAngles[angle].tx, camAngles[angle].ty, camAngles[angle].tz);
-}
-
-function resetObject()
-{
-    ring.reset();
-}
-
-function screenToggle()
-{
-}
-
-function selectChannel()
-{
-}
-
-function onKeyUp(evt)
-{
-    var keyCode = getKeyCode(evt);
-
-    keyPressed[keyCode] = false;
-}
-
-function onMouseDown(event)
-{
-    event.preventDefault();
-
-    // stop flying
-    camPosTarget = null;
-    camTargetTarget = null;
-
-    // check intersections with interactive objects
-    var vector = new THREE.Vector3(
-        ( event.clientX / window.innerWidth ) * 2 - 1,
-      - ( event.clientY / window.innerHeight ) * 2 + 1,
-        camera.near);
-    // var projector = new THREE.Projector();
-    // projector.unprojectVector( vector, camera );
-    vector.unproject(camera);
-
-    var ray = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize(), 0, 2000);
-
-    /*
-    var intersections = ray.intersectObject(remote, true);
-    if (intersections.length == 0) {
-        return;
-    }
-
-    var object = intersections[0].object;
-    if (object.handleMouseDown != null)
+    //***************************************************************************//
+    // User interaction                                                          //
+    //***************************************************************************//
+    function addInputHandler()
     {
-        object.handleMouseDown();
-        pressedObjects.push(object);
+        var dom = renderer.domElement;
+        dom.addEventListener('mouseup', onMouseUp, false);
+        dom.addEventListener('mousedown', onMouseDown, false);
+        window.addEventListener('keydown', onKeyDown, false);
+        window.addEventListener('keyup', onKeyUp, false);
     }
-    */
 
-    // console.log(result);
-}
-
-function onMouseUp(event)
-{
-    event.preventDefault();
-
-    while (pressedObjects.length > 0)
+    function onKeyDown(evt)
     {
-        var obj = pressedObjects.pop();
-        if (obj.handleMouseUp != null) {
-            obj.handleMouseUp();
+        var keyCode = getKeyCode(evt);
+        keyPressed[keyCode] = true;
+
+        console.log(keyCode);
+
+        if (keyCode == 32) {
+            if (animating) {
+                videoScreen.video.pause();
+            }
+            else {
+                videoScreen.video.play();
+            }
+            animating = !animating;
+        }
+        else if (keyCode >= 48 &&
+                 keyCode < 48+camAngles.length) {
+            var angle = keyCode-48;
+            setCameraAngle(angle);
+        }
+        else if (keyCode == 67) // 'c'
+        {
+            console.log(camera.position);
+            console.log(controls.target);
+        }
+        else if (keyCode == 70) {   // 'f'
+            ring.toggleFaces();
+        }
+        else if (keyCode == 77) {   // 'm'
+            ring.toggleFaceMovement();
+        }
+        else if (keyCode == 82) {   // 'r'
+            resetObject();
+        }
+        else if (keyCode == 65) {   // 'a'
+            nextClip();
+            nextViewAngle();
         }
     }
-}
 
-function onMouseMove(event)
-{
-    event.preventDefault();
-    if (dragging) {
-        var x = prevMouse.x - event.x;
-        var y = prevMouse.y - event.y;
-        camera.rotation.y -= x/1000;
-
-        prevMouse.x = event.x;
-        prevMouse.y = event.y;
+    function downloadModel()
+    {
+        console.log("exporting stl");
+        ring.updateMatrixWorld(true);
+        exporter = new THREE.STLExporter();
+        var data = exporter.exportScene(ring);
+        download(data, "ringbling.stl", "application/sla");
     }
-}
 
-function onWindowResize()
-{
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
+    var currentClip = 0;
+    var currentViewAngle = 0;
 
-    renderer.setSize(window.innerWidth, window.innerHeight);
-}
+    function nextClip()
+    {
+        currentClip++;
+        if (currentClip >= 8) {
+            currentClip = 0;
+        }
 
-function getKeyCode(evt)
-{
-    if (window.event != null)
-        return window.event.keyCode;
-    else
-        return evt.which;
-}
+        if (videoScreen.on) {
+            setTimeout(screenToggle, 0);
+        }
+        setTimeout(resetObject, 200);
+        setTimeout(selectChannel, 400);
+        setTimeout(screenToggle, 600);
+        setTimeout(nextClip, remote.channels[currentClip].length + 5000);
+    }
 
-function map(i, sStart, sEnd, tStart, tEnd)
-{
-    var v = i-sStart;
-    if (v>=0) {
-        if (i < sStart) {
+    function nextViewAngle()
+    {
+        setTimeout(function() {setCameraAngle(0);}, 0);
+        setTimeout(function() {setCameraAngle(1);}, 20000);
+        setTimeout(function() {setCameraAngle(2);}, 40000);
+        setTimeout(function() {setCameraAngle(0);}, 50000);
+        setTimeout(function() {setCameraAngle(3);}, 60000);
+        setTimeout(nextViewAngle, 85000);
+    }
+
+    function setCameraAngle(angle)
+    {
+        camPosTarget = new THREE.Vector3(camAngles[angle].x, camAngles[angle].y, camAngles[angle].z);
+        camTargetTarget = new THREE.Vector3(camAngles[angle].tx, camAngles[angle].ty, camAngles[angle].tz);
+    }
+
+    function resetObject()
+    {
+        ring.reset();
+    }
+
+    function screenToggle()
+    {
+    }
+
+    function selectChannel()
+    {
+    }
+
+    function onKeyUp(evt)
+    {
+        var keyCode = getKeyCode(evt);
+
+        keyPressed[keyCode] = false;
+    }
+
+    function onMouseDown(event)
+    {
+        event.preventDefault();
+
+        // stop flying
+        camPosTarget = null;
+        camTargetTarget = null;
+
+        // check intersections with interactive objects
+        var vector = new THREE.Vector3(
+            ( event.clientX / window.innerWidth ) * 2 - 1,
+          - ( event.clientY / window.innerHeight ) * 2 + 1,
+            camera.near);
+        // var projector = new THREE.Projector();
+        // projector.unprojectVector( vector, camera );
+        vector.unproject(camera);
+
+        var ray = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize(), 0, 2000);
+
+        /*
+        var intersections = ray.intersectObject(remote, true);
+        if (intersections.length == 0) {
+            return;
+        }
+
+        var object = intersections[0].object;
+        if (object.handleMouseDown != null)
+        {
+            object.handleMouseDown();
+            pressedObjects.push(object);
+        }
+        */
+
+        // console.log(result);
+    }
+
+    function onMouseUp(event)
+    {
+        event.preventDefault();
+
+        while (pressedObjects.length > 0)
+        {
+            var obj = pressedObjects.pop();
+            if (obj.handleMouseUp != null) {
+                obj.handleMouseUp();
+            }
+        }
+    }
+
+    function onMouseMove(event)
+    {
+        event.preventDefault();
+        if (dragging) {
+            var x = prevMouse.x - event.x;
+            var y = prevMouse.y - event.y;
+            camera.rotation.y -= x/1000;
+
+            prevMouse.x = event.x;
+            prevMouse.y = event.y;
+        }
+    }
+
+    function onWindowResize()
+    {
+        camera.aspect = modelWidth / modelHeight;
+        camera.updateProjectionMatrix();
+
+        renderer.setSize(modelWidth, modelHeight);
+    }
+
+    function getKeyCode(evt)
+    {
+        if (window.event != null)
+            return window.event.keyCode;
+        else
+            return evt.which;
+    }
+
+    function map(i, sStart, sEnd, tStart, tEnd)
+    {
+        var v = i-sStart;
+        if (v>=0) {
+            if (i < sStart) {
+                return tStart;
+            } else if (i > sEnd) {
+                return tEnd;
+            }
+        } else {
+            if (i > sStart) {
+                return tStart;
+            } else if (i < sEnd){
+                return tEnd;
+            }
+        }
+        var sRange = sEnd - sStart;
+        if (sRange == 0) {
             return tStart;
-        } else if (i > sEnd) {
-            return tEnd;
         }
-    } else {
-        if (i > sStart) {
-            return tStart;
-        } else if (i < sEnd){
-            return tEnd;
-        }
-    }
-    var sRange = sEnd - sStart;
-    if (sRange == 0) {
-        return tStart;
+
+        var tMax = tEnd - tStart;
+        return tStart + v / sRange * tMax;
     }
 
-    var tMax = tEnd - tStart;
-    return tStart + v / sRange * tMax;
-}
+    function getFuncVal(t)
+    {
+        return new THREE.Vector3(
+            Math.sin(t*Math.cos(t)),
+            Math.cos(t*Math.sin(t)),
+            Math.cos(t*Math.tan(t))
+            );
+    }
 
-function getFuncVal(t)
-{
-    return new THREE.Vector3(
-        Math.sin(t*Math.cos(t)),
-        Math.cos(t*Math.sin(t)),
-        Math.cos(t*Math.tan(t))
-        );
-}
+    function clip(x, bottom, top)
+    {
+        if (!clip) {
+            return x;
+        }
 
-function clip(x, bottom, top)
-{
-    if (!clip) {
+        if (x < bottom) {
+            x = bottom;
+        }
+        else if (x > top) {
+            x = top;
+        }
+
         return x;
     }
-
-    if (x < bottom) {
-        x = bottom;
-    }
-    else if (x > top) {
-        x = top;
-    }
-
-    return x;
+    return {
+        "loadModel" : loadModel,
+        "downloadModel" : downloadModel,
+        "ring" : ring
+    };
 }
 

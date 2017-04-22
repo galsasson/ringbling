@@ -17,15 +17,15 @@ ResourceManager.prototype.initMaterials = function()
 	// this.materials.object.shading = THREE.FlatShading;
 
 
-	resMgr.materials.ring = new THREE.MeshPhongMaterial( { color: 0xffffff, specular:0xffffff, combine: THREE.MultiplyOperation } );
+	window.resMgr.materials.ring = new THREE.MeshPhongMaterial( { color: 0xffffff, specular:0xffffff, combine: THREE.MultiplyOperation } );
 	this.texLoader = new THREE.TextureLoader();
 	this.texLoader.load( "textures/sky.jpg", function(map) {
 		map.wrapS = THREE.RepeatWrapping;
 		map.wrapT = THREE.RepeatWrapping;
 		map.anisotropy = 4;
 		map.repeat.set(40, 10);
-		resMgr.materials.ring.bumpMap = map;
-		resMgr.materials.ring.needsUpdate = true;
+		window.resMgr.materials.ring.bumpMap = map;
+		window.resMgr.materials.ring.needsUpdate = true;
 	} );
 
 
