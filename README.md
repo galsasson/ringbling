@@ -1,2 +1,2 @@
 # ringbling
-Ring customization for finger plints
+Ring customization for finger splints
