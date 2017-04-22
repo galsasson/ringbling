@@ -120,137 +120,19 @@ Ring.prototype.RingGeometry = function(width, height, thickness, radialSegments,
 		}
 	}
 
-
-	// if (extra.flattenBool) {
-	// 	// flatten below radius
-	// 	geo.vertices.forEach(function(item, index) {
-	// 		var item2d = new THREE.Vector3(item.x, item.y, 0);
-	// 		if (zero.distanceTo(item2d) < radius) {
-	// 			item2d.setLength(radius);
-	// 			item.x = item2d.x;
-	// 			item.y = item2d.y;
-	// 		}
-	// 	});
-	// }
-
 	geo.computeFaceNormals();
-	// geo.computeVertexNormals();
 	geo.computeBoundingSphere();
-
 	return geo;
 }
 
 
 
-// Ring.prototype.RingGeometry = function(radius, thickness, radialSegments, tubularSegments, arc, extrude, stride)
-// {
-// 	var geo = new THREE.TorusGeometry(radius, thickness, radialSegments, tubularSegments, arc);
-// 	// get maximum z
-// 	var maxZ=-99999;
-// 	var maxY=-99999;
-// 	geo.vertices.forEach(function(item, index) {
-// 		if (item.z > maxZ) { maxZ = item.z; };
-// 	});
-// 	var factor = (thickness+extrude)/maxZ;
-// 	var zero = new THREE.Vector3(0,0,0);
-// 	geo.vertices.forEach(function(item, index) {
-// 		// strech z
-// 		item.z *= factor;
-
-// 		// flatten below radius
-// 		var item2d = new THREE.Vector3(item.x, item.y, 0);
-// 		if (zero.distanceTo(item2d) < radius) {
-// 			item2d.setLength(radius);
-// 			item.x = item2d.x;
-// 			item.y = item2d.y;
-// 		}
-
-// 		// make stride
-// 		// var yCoeff = item.y/maxY;
-// 		// console.log("maxY = " + maxY);
-// 		var yCoeff = item.y/(radius+thickness);
-// 		item.z += yCoeff*(stride/2);
-
-// 		// make stride (keep top and bottom)
-// 		//
-// 		//if (item.y < radius && item.y > -radius) {
-// 		//	var yCoeff = item.y/maxY;
-// 		//	item.z += yCoeff*(stride/2);
-// 		//}
-// 		//else {
-// 		//	item.z += (item.y>0)?stride/2:-stride/2;
-// 		//}
-
-
-
-// 	});
-// 	geo.computeFaceNormals();
-// 	geo.computeVertexNormals();
-
-// 	geo.verticesNeedUpdate = true;
-// 	geo.normalsNeedUpdate = true;
-// 	return geo;
-// }
-
-
 Ring.prototype.update = function()
 {
-	// update shape
-	/*
-	for (var i=0; i<this.shapeParticles.length; i++)
-	{
-		this.shapeParticles[i].update();
-	}
-
-	// update extruded triangles
-	for (var i=0; i<this.particles.length; i++)
-	{
-		this.particles[i].update();
-	}
-
-	this.geo.computeFaceNormals();
-	this.geo.computeVertexNormals();
-	this.geo.verticesNeedUpdate = true;
-	this.geo.normalsNeedUpdate = true;
-
-
-	// update normals and positions of the vertices
-	for (var i=0; i<this.extrusionFaces.length; i++)
-	{
-		var face = this.extrusionFaces[i];
-		face.geo.computeFaceNormals();
-		face.geo.computeVertexNormals();
-		face.geo.verticesNeedUpdate = true;
-		face.geo.normalsNeedUpdate = true;
-	}
-
-	// scale object to a fixed size
-	var max = this.getMax();
-	var scale = this.size/max;
-	this.scale.set(scale, scale, scale);
-	reversedScale = max/this.size;
-
-	// console.log(max);
-	*/
 }
 
 Ring.prototype.reset = function()
 {
-	/*
-	// update shape
-	for (var i=0; i<this.shapeParticles.length; i++)
-	{
-		shapeMappingData[i] = 0;
-		this.shapeParticles[i].reset();
-	}
-
-	// update extruded triangles
-	for (var i=0; i<this.particles.length; i++)
-	{
-		mappingData[i] = 0;
-		this.particles[i].reset();
-	}
-	*/
 }
 
 
