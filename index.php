@@ -1,8 +1,3 @@
-<?php
-ini_set(‘display_errors’, 1);
-ini_set(‘display_startup_errors’, 1);
-error_reporting(E_ALL);
-?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -53,6 +48,13 @@ error_reporting(E_ALL);
             margin-top:3px;
             display:block;
         }
+        button {
+            background:none;
+            border:none;
+        }
+        button:hover {
+            cursor:pointer;
+        }
         html, body, header {
             width:100%;
         }
@@ -76,12 +78,13 @@ error_reporting(E_ALL);
             font-size:11pt;
             vertical-align:middle;
         }
-        .downloadButtonMock, main > .splints .downloadButton {
+        .downloadButtonMock, main > .splints .downloadButton, #downloadAllButton {
             color:white;
             text-transform:uppercase;
             background-color:#3D5AFE;
             border:none;
             border-radius:20px;
+            letter-spacing:2px;
         }
         body > header {
             height:280px;
@@ -124,7 +127,8 @@ error_reporting(E_ALL);
             margin-bottom:21px;
         }
         main > .splints {
-            margin: 40px 0;
+            margin: 40px 0 100px 0;
+            position:relative;
         }
         main > .splints .splint {
             padding:40px;
@@ -187,9 +191,31 @@ error_reporting(E_ALL);
             color:black;
             border:none;
         }
+        #addSplint {
+            position:absolute;
+            right:40px;
+            bottom:-80px;
+        }
         #addSplint:before {
             content:"Add a splint";
             text-transform:UPPERCASE;
+            position:absolute;
+            left:-170px;
+            bottom:35px;
+            color:#F44336;
+            font-size:18pt;
+        }
+        #downloadAllButton {
+            margin-top:20px 0;
+            padding:15px 30px;
+            color:white;
+            background-color:#3D5AFE;
+            position:relative;
+            margin-left:40px;
+            margin-bottom:60px;
+            font-size:24pt;
+            line-height:32px;
+            border-radius:60px;
         }
         footer {
             background-color:black;
@@ -235,7 +261,7 @@ error_reporting(E_ALL);
                 <button class="downloadButton">Download</button>
                 <button class="removeSplint" title="Remove splint"><img width="30" height="30" alt="Close button" src="images/x.svg" /></button>
             </article>
-            <button title="Add a splint" id="addSplint">+</button>
+            <button title="Add a splint" id="addSplint"><img width="100" height="100" alt="Add Splint Button" src="images/addSplint.svg" /> </button>
         </section>
     </main>
     <footer>Built at <a href="http://www.nyc.tomglobal.org">TOM NYC</a></footer>
@@ -263,6 +289,9 @@ error_reporting(E_ALL);
     </div>
     <script type="text/javascript">
         var models = [];
+        var downloadAllButton = document.createElement("button");
+        downloadAllButton.id = "downloadAllButton";
+
         $("#addSplint").click(function(e) {
             var numberOfSplints = $(".splints .splint").length + 1;
             var newSplint = $(".templates .splint").clone();
@@ -290,6 +319,10 @@ error_reporting(E_ALL);
             newSplint.find(".downloadButton").click(downloadSplintFile);
 
             newSplint.insertBefore($("#addSplint"));
+            if ($("#downloadAllButton").length === 0) {
+                $("main").append(downloadAllButton);
+            }
+            $("#downloadAllButton").text("Download All (" + numberOfSplints + ")");
             // Model container needs to be inserted before it can be loaded
 
             models["splint"+numberOfSplints+"Model"]  = ParametricApp();
