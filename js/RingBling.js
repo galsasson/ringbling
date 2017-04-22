@@ -2,7 +2,7 @@ RingBling = function()
 {
 	THREE.Object3D.call(this);
 
-	this.ringsOffset = 4;
+	this.ringsOffset = 0;
 	this.ringl = null;
 	this.ringr = null;
 }
@@ -11,11 +11,13 @@ RingBling.prototype = Object.create(THREE.Object3D.prototype);
 RingBling.prototype.init = function()
 {
 	this.ringl = new Ring();
-	this.ringl.radius = 8.5;
+	this.ringl.height = 17.94;
+	this.ringl.width = 16.43;
 	this.ringl.material = resMgr.materials.ringl;
 	this.ringl.init();
 	this.ringr = new Ring();
-	this.ringr.radius = 10.5;
+	this.ringr.height = 19.67;
+	this.ringr.width = 17.67;
 	this.ringr.material = resMgr.materials.ringr;
 	this.ringr.init();
 	this.add(this.ringl);
@@ -34,11 +36,11 @@ RingBling.prototype.updateGeometry = function(that)
 RingBling.prototype.align = function()
 {
 	// put rings end to end
-	var offtby2 = this.ringsOffset/2;
 	this.ringl.rotation.set(-Math.PI/4, 0, 0);
 	this.ringr.rotation.set(Math.PI/4, 0, 0);
-	this.ringl.position.set(0, -25+this.ringl.radius*ratio*Math.sin(Math.PI/4), -this.ringl.radius*ratio*Math.cos(Math.PI/4));
-	this.ringr.position.set(0, -25+this.ringr.radius*ratio*Math.sin(Math.PI/4), this.ringr.radius*ratio*Math.cos(Math.PI/4));
+
+	this.ringl.position.set(0, 0.5*this.ringl.height*Math.sin(Math.PI/4), -0.5*this.ringl.height*Math.cos(Math.PI/4));
+	this.ringr.position.set(0, 0.5*this.ringr.height*Math.sin(Math.PI/4), 0.5*this.ringr.height*Math.cos(Math.PI/4)+this.ringsOffset);
 }
 
 

@@ -2,7 +2,8 @@ Ring = function()
 {
 	THREE.Object3D.call(this);
 
-	this.radius = 14;
+	this.height = 14;
+	this.width = 12;
 	this.thickness = 1;
 	this.radialSegments = 64;
 	this.tubularSegments = 128;
@@ -18,6 +19,7 @@ Ring = function()
 	this.extra.stride = 0;
 	this.extra.flatten = false;
 	this.extra.trueTubOrientation = false;
+	this.extra.flattenX = 0.2;
 }
 Ring.prototype = Object.create(THREE.Object3D.prototype);
 
@@ -28,7 +30,7 @@ Ring.prototype.init = function()
 
 Ring.prototype.updateGeometry = function(that)
 {
-	that.geo = that.RingGeometry(that.radius, that.thickness, that.radialSegments, that.tubularSegments, Math.PI*2, that.extra);
+	that.geo = that.RingGeometry(that.width, that.height, that.thickness, that.radialSegments, that.tubularSegments, Math.PI*2, that.extra);
 	if (that.mesh != null) {
 		that.remove(that.mesh);
 	}
@@ -38,20 +40,22 @@ Ring.prototype.updateGeometry = function(that)
 	this.add(that.mesh);
 }
 
-Ring.prototype.RingGeometry = function(radius, thickness, radialSegments, tubularSegments, arc, extra)
+Ring.prototype.RingGeometry = function(width, height, thickness, radialSegments, tubularSegments, arc, extra)
 {
 	var geo = new THREE.Geometry();
 
-	radius = radius || 100;
+	width = width || 12;
+	height = height || 14;
 	thickness = thickness || 40;
 	radialSegments = Math.floor( radialSegments ) || 8;
 	tubularSegments = Math.floor( tubularSegments ) || 6;
 	arc = arc || Math.PI * 2;
 
-
+	var hby2 = height/2;
+	var wby2 = width/2;
 	var radAng = arc/radialSegments;
 	var tubAng = Math.PI*2 / tubularSegments;
-	var radVec = new THREE.Vector3(0, radius, 0);
+	//var radVec = new THREE.Vector3(0, radius, 0);
 	var tubVec = new THREE.Vector3(0, thickness, 0);
 	var strechVec = new THREE.Vector3(0,0,0);
 	var zero = new THREE.Vector3(0,0,0);
@@ -69,8 +73,9 @@ Ring.prototype.RingGeometry = function(radius, thickness, radialSegments, tubula
 		// var rad = radVec.clone().multiplyScalar(1+radOsc).applyAxisAngle(new THREE.Vector3(0, 0, 1), r*radAng); // rad for circle
 		// var tub = tubVec.clone().applyAxisAngle(new THREE.Vector3(0, 0, 1), r*radAng);
 
-		var rad = new THREE.Vector3(radius*Math.cos(r*radAng+Math.PI/2), radius*window.ratio*Math.sin(r*radAng+Math.PI/2), 0);
+		var rad = new THREE.Vector3(wby2*Math.cos(r*radAng+Math.PI/2), hby2*Math.sin(r*radAng+Math.PI/2), 0);
 		var tub = rad.clone().normalize().multiplyScalar(thickness);
+		// TODO: remove strech
 		var strech = strechVec.clone().add(new THREE.Vector3(0, 0, extra.stride*Math.cos(r*radAng)));
 
 		if (extra.trueTubOrientation) {
@@ -81,8 +86,10 @@ Ring.prototype.RingGeometry = function(radius, thickness, radialSegments, tubula
 			// var nextRad = radVec.clone().multiplyScalar(1+nextRadOsc).applyAxisAngle(new THREE.Vector3(0, 0, 1), (r+1)*radAng);  // rad for circle
 			// var nextTub = tubVec.clone().applyAxisAngle(new THREE.Vector3(0, 0, 1), (r+1)*radAng);
 
-			var nextRad = new THREE.Vector3(radius*Math.cos((r+1)*radAng+Math.PI/2), radius*window.ratio*Math.sin((r+1)*radAng+Math.PI/2), 0);
+			var nextRad = new THREE.Vector3(wby2*Math.cos((r+1)*radAng+Math.PI/2), hby2*Math.sin((r+1)*radAng+Math.PI/2), 0);
 			var nextTub = nextRad.clone().normalize().multiplyScalar(thickness);
+
+			// TODO: remove strech
 			var nextStrech = strechVec.clone().add(new THREE.Vector3(0, 0, extra.stride*Math.cos((r+1)*radAng)));
 
 			var rotAxis = nextStrech.add(nextRad).sub(nextTub).sub(strech.clone().add(rad).sub(tub)).normalize();
@@ -93,9 +100,10 @@ Ring.prototype.RingGeometry = function(radius, thickness, radialSegments, tubula
 
 		for (var t=0; t<tubularSegments; t++)
 		{
-			tubShell = tub.clone().applyAxisAngle(rotAxis, t*tubAng);
+			var tubShell = tub.clone().applyAxisAngle(rotAxis, t*tubAng);
+			tubShell.x *= extra.flattenX;
 
-			var vert = strech.clone().add(rad).add(tubShell);
+			var vert = rad.clone().add(tubShell);
 			geo.vertices.push(new THREE.Vector3(vert.x, vert.y, vert.z));
 
 			// set face indices (build two triangles in front of the vertex- next index in row,column, wraped around to 0)
@@ -397,5 +405,27 @@ function equals(v1, v2)
 	}
 }
 
+var FLT_EPSILON = 0.0001
+
+function map(value, inputMin, inputMax, outputMin, outputMax, clamp) {
+
+	if (Math.abs(inputMin - inputMax) < FLT_EPSILON){
+		return outputMin;
+	} else {
+		var outVal = ((value - inputMin) / (inputMax - inputMin) * (outputMax - outputMin) + outputMin);
+
+		if( clamp ){
+			if(outputMax < outputMin){
+				if( outVal < outputMax )outVal = outputMax;
+				else if( outVal > outputMin )outVal = outputMin;
+			}else{
+				if( outVal > outputMax )outVal = outputMax;
+				else if( outVal < outputMin )outVal = outputMin;
+			}
+		}
+		return outVal;
+	}
+
+}
 
 
