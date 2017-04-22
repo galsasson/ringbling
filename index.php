@@ -22,8 +22,8 @@
   </head>
   <body>
     <header>
-        <h1><img width="350" height="196" alt="Ring Bling Logo" src="/images/ring-bling.svg" /></h1>
-        <h2><a title="FAQ Page" href="/FAQ/"><img width="175" height="180" title="Frequently Asked Questions" alt="Frequently Asked Questions Logo" src="/images/faq.svg" /></a></h2>
+        <h1><img width="215" height="120" alt="Ring Bling Logo" src="/images/ring-bling.svg" /></h1>
+        <h2><a title="FAQ Page" href="/FAQ/"><img width="127" height="130" title="Frequently Asked Questions" alt="Frequently Asked Questions Logo" src="/images/faq.svg" /></a></h2>
     </header>
     <main>
         <header>
@@ -50,7 +50,7 @@
                 <button class="downloadButton">Download</button>
                 <button class="removeSplint" title="Remove splint"><img width="30" height="30" alt="Close button" src="images/x.svg" /></button>
             </article>
-            <button title="Add a splint" id="addSplint"><img width="100" height="100" alt="Add Splint Button" src="images/addSplint.svg" /> </button>
+            <button title="Add a splint" id="addSplint"><img width="122" height="122" alt="Add Splint Button" src="images/addSplint.svg" /> </button>
         </section>
     </main>
     <footer>Built at <a href="http://www.nyc.tomglobal.org">TOM NYC</a></footer>

@@ -16,18 +16,24 @@ a {
     border-bottom:1px dashed black;
     display:inline-block;
 }
+a:hover {
+    color:#F44336;
+}
 input {
-    color:#3D5AFE;
+    color:black;
     padding-left:10px;
     border:none;
 }
+input:focus {
+    outline:2px solid #3D5AFE;
+}
 label {
     text-transform:uppercase;
-    color:#3D5AFE;
+    color:black;
     letter-spacing:1.5px;
-    margin-top:3px;
+    margin-top:8px;
     display:block;
-    font-size:18pt;
+    font-size:12pt;
 }
 button {
     background:none;
@@ -55,9 +61,10 @@ html, body, header, h1, h2, h3 {
 }
 .downloadButtonMock {
     display:inline-block;
-    padding:5px 15px;
-    font-size:11pt;
-    vertical-align:middle;
+    padding:0px 8px;
+    font-size:6pt;
+    vertical-align:top;
+    letter-spacing:1px;
 }
 .downloadButtonMock, main > .splints .downloadButton, #downloadAllButton {
     color:white;
@@ -65,10 +72,15 @@ html, body, header, h1, h2, h3 {
     background-color:#3D5AFE;
     border:none;
     border-radius:20px;
+}
+main > .splints .downloadButton, #downloadAllButton {
     letter-spacing:2px;
 }
+main > .splints .downloadButton:hover, #downloadAllButton:hover {
+    background:#0031CA;
+}
 body > header {
-    height:280px;
+    height:200px;
     background:red;
     overflow:hidden;
     padding:40px;
@@ -90,24 +102,43 @@ body > header h1 {
 }
 body > header h2 {
     position:absolute;
-    right:60px;
-    top:50px;
+    right:20px;
+    top:20px;
+}
+body > header h2:after {
+    content:"More info";
+    position:absolute;
+    bottom:-10px;
+    left:10px;
+    display:inline-block;
+    font-size:12pt;
+    line-height:16pt;
+    color:white;
+    text-transform:UPPERCASE;
+    letter-spacing:2px;
+    padding-bottom:2px;
+}
+body > header h2:hover:after {
+    border-bottom:2px solid white;
+    bottom:-12px;
+    cursor:pointer;
 }
 main > header {
     padding-left:40px;
     padding-right:40px;
 }
 main > header > h1 {
-    font-size:45pt;
+    font-size:36pt;
     color:#F44336;
-    margin-top:21px;
-    margin-bottom:30px;
+    margin-top:24px;
+    margin-bottom:24px;
 }
 main > header > h1, main > header > h2 {
     width:794px;
 }
 main > header > h2 {
-    font-size:22pt;
+    font-size:12pt;
+    line-height:18pt;
     margin-bottom:21px;
 }
 main > .splints {
@@ -115,7 +146,7 @@ main > .splints {
     position:relative;
 }
 main > .splints .splint {
-    padding:40px;
+    padding:24px 40px;
     background-color:#F2F2F2;
     position:relative;
     min-height:450px;
@@ -129,62 +160,71 @@ main > .splints .splint .splintName {
 }
 main > .splints .splint .splintName input {
     width:587px;
-    height:72px;
-    font-size:48px;
-    line-height:56px;
+    height:56px;
+    font-size:32px;
+    line-height:40px;
     display:block;
 }
 main > .splints .splintMeasurement1 {
     display:inline-block;
-    margin-right:10px;
+    margin-right:24px;
 }
 main > .splints .splintMeasurement1 input, main > .splints .splintMeasurement2 input {
-    height:72px;
+    height:56px;
     width:175px;
-    font-size:48px;
-    line-height:56px;
+    font-size:32px;
+    line-height:40px;
     display:block;
 }
 main > .splints .sizerHelp {
     color:#999999;
-    font-size:18pt;
-    margin-top:24px;
+    font-size:12pt;
+    line-height:16px;
+    margin-top:16px;
 }
 main > .splints .model3d {
     display:inline-block;
     position:absolute;
-    bottom:40px;
+    top:80px;
     right:40px;
 }
 main > .splints .downloadButton {
     bottom:40px;
     left:40px;
     position:absolute;
-    padding:7px 20px;
-    font-size:18pt;
+    padding:10px 20px;
+    font-size:12pt;
     border-radius:50px;
 }
 main > .splints .removeSplint {
     position:absolute;
     background:none;
-    top:40px;
+    top:24px;
     right:40px;
     color:black;
     border:none;
 }
 #addSplint {
     position:absolute;
-    right:40px;
+    right:16px;
     bottom:-80px;
 }
 #addSplint:before {
     content:"Add a splint";
     text-transform:UPPERCASE;
     position:absolute;
-    left:-170px;
-    bottom:35px;
+    left:-160px;
+    bottom:38px;
     color:#F44336;
     font-size:18pt;
+    padding-bottom:3px;
+}
+#addSplint:focus {
+    outline:none;
+}
+#addSplint:hover:before {
+    border-bottom:2px solid #F44336;
+    bottom:36px;
 }
 #downloadAllButton {
     margin-top:20px 0;
