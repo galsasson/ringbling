@@ -23,12 +23,12 @@
   <body>
     <header>
         <h1><img width="215" height="120" alt="Ring Bling Logo" src="/images/ring-bling.svg" /></h1>
-        <h2><a title="FAQ Page" href="/FAQ/"><img width="127" height="130" title="Frequently Asked Questions" alt="Frequently Asked Questions Logo" src="/images/faq.svg" /></a></h2>
+        <h2><a title="FAQ Page" href="/faq/"><img width="127" height="130" title="Frequently Asked Questions" alt="Frequently Asked Questions Logo" src="/images/faq.svg" /></a></h2>
     </header>
     <main>
         <header>
             <h1>Model your 3D-printable custom ring splints</h1>
-            <h2>Enter your <a href="FAQ#siris">Siris ring sizes</a> below and watch as your custom ring splint is designed. Click <span class="downloadButtonMock">Download</span> to download an <a href="FAQ#stl">.stl file</a> for each 3D model, which you can use to <a href="FAQ#print">3D print your ring splints</a>.</h2>
+            <h2>Enter your <a href="/faq/#siris">Siris ring sizes</a> below and watch as your custom ring splint is designed. Click <span class="downloadButtonMock">Download</span> to download an <a href="/faq/#stl">.stl file</a> for each 3D model, which you can use to <a href="/faq/#print">3D print your ring splints</a>.</h2>
         </header>
         <section class="splints">
             <article class="splint" data-splint-number="1">
@@ -45,7 +45,7 @@
                     <label for="splint1Measurement2">Ring 2 Size</label>
                 </fieldset>
                 <br />
-                <a class="sizerHelp" href="FAQ/#sizing">Need help with sizing?</a>
+                <a class="sizerHelp" href="/faq/#sizing">Need help with sizing?</a>
                 <div class="model3d" id="splint1Model"></div>
                 <button class="downloadButton">Download</button>
                 <button class="removeSplint" title="Remove splint"><img width="30" height="30" alt="Close button" src="images/x.svg" /></button>
@@ -70,7 +70,7 @@
                 <label for="splintNMeasurement2">Ring 2 Size</label>
             </fieldset>
             <br />
-            <a class="sizerHelp" href="FAQ#sizing">Need help with sizing?</a>
+            <a class="sizerHelp" href="/faq/#sizing">Need help with sizing?</a>
             <div class="model3d" id="splintNModel"></div>
             <button class="downloadButton">Download</button>
             <button class="removeSplint" title="Remove splint"><img width="30" height="30" alt="Close button" src="images/x.svg" /></button>

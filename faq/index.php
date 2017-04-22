@@ -10,7 +10,7 @@
   <body>
   <header>
         <h1><a href="/"><img width="215" height="120" alt="Ring Bling Logo" src="/images/ring-bling.svg" /></a></h1>
-        <h2><a title="FAQ Page" href="/FAQ/"><img width="127" height="130" title="Frequently Asked Questions" alt="Frequently Asked Questions Logo" src="/images/faq.svg" /></a></h2>
+        <h2><a title="FAQ Page" href="/faq/"><img width="127" height="130" title="Frequently Asked Questions" alt="Frequently Asked Questions Logo" src="/images/faq.svg" /></a></h2>
     </header>
     <main>
       <header>
