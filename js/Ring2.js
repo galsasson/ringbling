@@ -4,7 +4,7 @@ Ring = function()
 
 	this.height = 14;
 	this.width = 12;
-	this.thickness = 2;
+	this.thickness = 1.8;
 	this.radialSegments = 128;
 	this.tubularSegments = 32;
 	this.flaten = 0;
@@ -101,7 +101,7 @@ Ring.prototype.RingGeometry = function(width, height, thickness, radialSegments,
 		for (var t=0; t<tubularSegments; t++)
 		{
 			var tubShell = tub.clone().applyAxisAngle(rotAxis, t*tubAng);
-			tubShell.x *= extra.flattenX;
+			tubShell.x *= extra.flattenX;//*Math.cos(r*radAng);
 
 			var vert = rad.clone().add(tubShell);
 			geo.vertices.push(new THREE.Vector3(vert.x, vert.y, vert.z));
