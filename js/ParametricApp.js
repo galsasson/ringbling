@@ -122,25 +122,6 @@ function ParametricApp() {
         spotLight.shadow.camera.far = 1500;
         // spotLight.shadowCameraVisible = true;
         scene.add(spotLight);
-
-        // screen spotlight
-        /*
-        screenLight = new THREE.SpotLight(0x000000, 3.5);
-        screenLight.angle = 0.27;
-        screenLight.exponent = 103;
-        screenLight.position.set(0, 361, -1691);
-        screenLight.target.position.set(0, -100, 800);
-        scene.add(screenLight);
-
-
-
-        var spot2 = new THREE.SpotLight(0xffffff, 0.2);
-        spot2.angle = Math.PI/2;
-        spot2.exponent = 50;
-        spot2.position.set(0, 2000, 200);
-        spot2.target.position.set(0, 0, 200);
-        scene.add(spot2);
-        */
     }
 
     //***************************************************************************//
@@ -193,43 +174,6 @@ function ParametricApp() {
         style.add(ring.ringl.extra, 'freq', 0, 20).onChange(function() {ring.updateGeometry(ring)});
         style.add(ring.ringl.extra, 'mag', 0, 1).onChange(function() {ring.updateGeometry(ring)});
         style.add(ring.ringl.extra, 'clamp').onChange(function() {ring.updateGeometry(ring)});
-    /*
-        var f4 = f1.addFolder('EYE GEOMETRY');
-        f4.add(genome, 'eyeRadius', 0, 10).onChange(onGeometryChanged);
-        f4.add(genome, 'eyeLidRadius', 0, 13).onChange(onGeometryChanged);
-        f4.add(genome, 'topLidAngle', 0, 2*Math.PI).onChange(onGeometryChanged);
-        f4.add(genome, 'bottomLidAngle', 0, 2*Math.PI).onChange(onGeometryChanged);
-
-        var f2 = gui.addFolder('TENTACLE GEOMETRY');
-        f2.add(genome, 'tentBaseRadius', 0, 20).onChange(onGeometryChanged);
-        f2.add(genome, 'numTents', 0, 32).onChange(onGeometryChanged);
-        f2.add(genome, 'numJoints', 0, 50).onChange(onGeometryChanged);
-
-        tmpF = f2.addFolder('Joint Scale Vector');
-        tmpF.add(genome.jointScaleVector, 'x', 0.7, 1.3).onChange(onGeometryChanged);
-        tmpF.add(genome.jointScaleVector, 'y', 0.7, 1.3).onChange(onGeometryChanged);
-        tmpF.add(genome.jointScaleVector, 'z', 0.7, 1.3).onChange(onGeometryChanged);
-        f2.add(genome, 'numSpikesPerJoint', 0, 10).onChange(onGeometryChanged);
-        f2.add(genome, 'spikesArcStart', 0.0, 2*Math.PI).onChange(onGeometryChanged);
-        f2.add(genome, 'spikesArcEnd', 0.0, 2*Math.PI).onChange(onGeometryChanged);
-        tmpF = f2.addFolder("Spike Scale Vector");
-        tmpF.add(genome.spikeScale, 'x', 0.7, 1.3).onChange(onGeometryChanged);
-        tmpF.add(genome.spikeScale, 'y', 0.7, 1.3).onChange(onGeometryChanged);
-        tmpF.add(genome.spikeScale, 'z', 0.7, 1.3).onChange(onGeometryChanged);
-        f2.add(genome, 'tentColorInc', 0, 10).onChange(onGeometryChanged);
-        f2.add(genome, 'tentColorBW').onChange(onGeometryChanged);
-
-        var f3 = gui.addFolder('ANIMATION');
-        f3.add(genome, 'tentFactor1', 0, 100);
-        f3.add(genome, 'tentFactor2', 0, 50);
-        f3.add(genome, 'tentFactor3', 0, 50);
-        f3.add(genome, 'tentFactor4', 0, 50);
-
-        var f5 = gui.addFolder('GEOMETRY DETAILS');
-        f5.add(genome, 'sphereDetail', 0, 40).onChange(onGeometryChanged);
-        f5.add(genome, 'cylinderDetail', 0, 40).onChange(onGeometryChanged);
-        f5.add(genome, 'eyeDetails', 0, 20).onChange(onGeometryChanged);
-    */
     }
 
     //***************************************************************************//
