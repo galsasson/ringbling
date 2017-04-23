@@ -13,6 +13,11 @@ li {
 a:hover {
   cursor:pointer;
 }
+#toc a {
+  border-bottom:none;
+  font-size:16px;
+  font-family:'WorkSans-Regular';
+}
 main > section {
   padding:0px 40px;
 }
@@ -31,17 +36,22 @@ main > section {
   vertical-align:top;
 }
 h3 {
-  font-size:32pt;
-  line-height:40pt;
-  margin:28px 0 16px 0;
+  font-size:24pt;
+  line-height:32pt;
+  margin:22px 0 8px 0;
   padding:0px;
 }
 h3:first-of-type {
   margin-top:-10px;
 }
 p {
-  font-size:16pt;
+  font-size:12pt;
   margin-bottom:12px;
+  line-height:16pt;
+  margin-top:0px;
+}
+p, p * {
+  font-family:'WorkSans-Regular';
 }
 iframe {
   max-width:100%;

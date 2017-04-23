@@ -68,7 +68,7 @@ session_destroy();
             <button title="Add a splint" id="addSplint"><img width="122" height="122" alt="Add Splint Button" src="images/addSplint.svg" /> </button>
         </section>
     </main>
-    <footer><p>RingBling.org is a project sponsored by Tikkun Olam Makers (TOM), a registered non-profit organization. It was created by volunteers and is completely open source.</p></footer>
+    <footer><p>RingBling.org is a project sponsored by <a target="_blank" href="http://nyc.tomglobal.org">Tikkun Olam Makers</a> (TOM), a registered non-profit organization. It was created by volunteers and is completely open source.</p></footer>
     <div class="templates">
         <article class="splint" data-splint-number="N">
             <fieldset class="splintName">

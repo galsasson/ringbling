@@ -22,9 +22,12 @@ footer * {
 }
 a {
     text-decoration:none;
-    color:black;
     border-bottom:1px dashed black;
     display:inline-block;
+    color:black;
+}
+a:visited {
+    color:black;
 }
 a:hover {
     color:#F44336;
@@ -158,6 +161,9 @@ main > header > h2 {
     line-height:18pt;
     margin-bottom:21px;
 }
+main > header > h2, main > header > h2 * {
+    font-family: 'WorkSans-Regular';
+}
 main > .splints {
     margin: 40px 0 40px 0;
     position:relative;
@@ -195,6 +201,11 @@ main > .splints .sizerHelp {
     font-size:12pt;
     line-height:16px;
     margin-top:16px;
+    padding-bottom:3px;
+    border-bottom-color:#999999;
+}
+main > .splints .sizerHelp:hover {
+    color:#F44336;
 }
 main > .splints .downloadButton {
     bottom:40px;
@@ -253,13 +264,18 @@ main > .splints .model3d {
 footer {
     min-height:100px;
     width:100%;
-    color:black;
+    color:#999999;
     padding:40px;
-    font-size:16pt;
+    font-size:12pt;
+    line-height:18pt;
 }
 footer p {
     margin:0;
     padding:0;
+}
+footer a {
+    color:#999999;
+    border-bottom-color:#999999;
 }
 
 /* Responsive updates */
