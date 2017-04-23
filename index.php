@@ -5,7 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Ring Bling</title>
-    <script src="js/libs/jquery-1.10.2.min.js"></script>
     <script src="js/libs/three.js"></script>
     <script src="js/libs/RequestAnimationFrame.js"></script>
     <script src="js/libs/OrbitControls.js"></script>
@@ -55,7 +54,6 @@
         </section>
     </main>
     <footer>RingBling.org is a project sponsored by Tikkun Olam Makers (TOM), a registered non-profit organization. It was created by volunteers and is completely open source.</footer>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <div class="templates">
         <article class="splint" data-splint-number="N">
             <fieldset class="splintName">
@@ -77,6 +75,7 @@
             <button class="removeSplint" title="Remove splint"><img width="30" height="30" alt="Close button" src="images/x.svg" /></button>
         </article>
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="/script.js" type="text/javascript"></script>
   </body>
 </html>
