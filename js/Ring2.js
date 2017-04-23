@@ -2,10 +2,11 @@ Ring = function()
 {
 	THREE.Object3D.call(this);
 
-	this.radius = 10;
-	this.thickness = 2;
-	this.radialSegments = 64;
-	this.tubularSegments = 128;
+	this.height = siris_sizes['10'][0];
+	this.width = siris_sizes['10'][0];
+	this.thickness = 2.5;
+	this.radialSegments = 128;
+	this.tubularSegments = 32;
 	this.flaten = 0;
 	this.showFaces = true;
 	this.showFaceMovement = true;
@@ -16,8 +17,10 @@ Ring = function()
 	this.extra.freq = 0;
 	this.extra.clamp = false;
 	this.extra.stride = 0;
-	this.extra.flatten = true;
-	this.extra.trueTubOrientation = true;
+	this.extra.flattenSides = 0.5;
+	this.extra.flattenTop = 0.5;
+	this.extra.flattenAngle = 0;
+	this.extra.trueTubOrientation = false;
 }
 Ring.prototype = Object.create(THREE.Object3D.prototype);
 
@@ -28,30 +31,32 @@ Ring.prototype.init = function()
 
 Ring.prototype.updateGeometry = function(that)
 {
-	that.geo = that.RingGeometry(that.radius, that.thickness, that.radialSegments, that.tubularSegments, Math.PI*2, that.extra);
+	that.geo = that.RingGeometry(that.width, that.height, that.thickness, that.radialSegments, that.tubularSegments, Math.PI*2, that.extra);
 	if (that.mesh != null) {
 		that.remove(that.mesh);
 	}
-	that.mesh = new THREE.Mesh(that.geo, that.material?this.material:resMgr.materials.object);
+	that.mesh = new THREE.Mesh(that.geo, resMgr.materials.object);
 	that.mesh.castShadow = true;
 	that.mesh.receiveShadow = true;
 	this.add(that.mesh);
 }
 
-Ring.prototype.RingGeometry = function(radius, thickness, radialSegments, tubularSegments, arc, extra)
+Ring.prototype.RingGeometry = function(width, height, thickness, radialSegments, tubularSegments, arc, extra)
 {
 	var geo = new THREE.Geometry();
 
-	radius = radius || 100;
+	width = width || 12;
+	height = height || 14;
 	thickness = thickness || 40;
 	radialSegments = Math.floor( radialSegments ) || 8;
 	tubularSegments = Math.floor( tubularSegments ) || 6;
 	arc = arc || Math.PI * 2;
 
-
+	var hby2 = (height+thickness)/2;
+	var wby2 = (width+thickness)/2;
 	var radAng = arc/radialSegments;
 	var tubAng = Math.PI*2 / tubularSegments;
-	var radVec = new THREE.Vector3(0, radius, 0);
+	//var radVec = new THREE.Vector3(0, radius, 0);
 	var tubVec = new THREE.Vector3(0, thickness, 0);
 	var strechVec = new THREE.Vector3(0,0,0);
 	var zero = new THREE.Vector3(0,0,0);
@@ -66,9 +71,12 @@ Ring.prototype.RingGeometry = function(radius, thickness, radialSegments, tubula
 			radOsc=0;
 		}
 		time+=extra.freq*radAng;
+		// var rad = radVec.clone().multiplyScalar(1+radOsc).applyAxisAngle(new THREE.Vector3(0, 0, 1), r*radAng); // rad for circle
+		// var tub = tubVec.clone().applyAxisAngle(new THREE.Vector3(0, 0, 1), r*radAng);
 
-		var rad = radVec.clone().multiplyScalar(1+radOsc).applyAxisAngle(new THREE.Vector3(0, 0, 1), r*radAng);
-		var tub = tubVec.clone().applyAxisAngle(new THREE.Vector3(0, 0, 1), r*radAng);
+		var rad = new THREE.Vector3(wby2*Math.cos(r*radAng+Math.PI/2), hby2*Math.sin(r*radAng+Math.PI/2), 0);
+		var tub = rad.clone().normalize().multiplyScalar(thickness);
+		// TODO: remove strech
 		var strech = strechVec.clone().add(new THREE.Vector3(0, 0, extra.stride*Math.cos(r*radAng)));
 
 		if (extra.trueTubOrientation) {
@@ -76,21 +84,27 @@ Ring.prototype.RingGeometry = function(radius, thickness, radialSegments, tubula
 			if (extra.clamp && nextRadOsc<0) {
 				nextRadOsc=0;
 			}
-			var nextRad = radVec.clone().multiplyScalar(1+nextRadOsc).applyAxisAngle(new THREE.Vector3(0, 0, 1), (r+1)*radAng);
-			var nextTub = tubVec.clone().applyAxisAngle(new THREE.Vector3(0, 0, 1), (r+1)*radAng);
-			var nextStrech = strechVec.clone().add(new THREE.Vector3(0, 0, extra.stride*Math.cos((r+1)*radAng)));
+			// var nextRad = radVec.clone().multiplyScalar(1+nextRadOsc).applyAxisAngle(new THREE.Vector3(0, 0, 1), (r+1)*radAng);  // rad for circle
+			// var nextTub = tubVec.clone().applyAxisAngle(new THREE.Vector3(0, 0, 1), (r+1)*radAng);
 
-			var rotAxis = nextStrech.add(nextRad).sub(nextTub).sub(strech.clone().add(rad).sub(tub)).normalize();
+			var nextRad = new THREE.Vector3(wby2*Math.cos((r+1)*radAng+Math.PI/2), hby2*Math.sin((r+1)*radAng+Math.PI/2), 0);
+			var nextTub = nextRad.clone().normalize().multiplyScalar(thickness);
+			var rotAxis = nextRad.clone().sub(nextTub).sub(rad.clone().sub(tub)).normalize();
 		}
 		else {
-			var rotAxis = tub.clone().applyAxisAngle(new THREE.Vector3(0, 0, 1), 0.5*Math.PI).normalize();
+			var rotAxis = rad.clone().normalize().applyAxisAngle(new THREE.Vector3(0, 0, 1), Math.PI/2);
+			// var rotAxis = new THREE.Vector3(1, 0, 0);
 		}
 
 		for (var t=0; t<tubularSegments; t++)
 		{
-			tubShell = tub.clone().applyAxisAngle(rotAxis, t*tubAng);
+			var tubShell = tub.clone().applyAxisAngle(rotAxis, t*tubAng);
+			tubShell.x *= map(Math.abs(Math.sin(r*radAng)), 0, 1, 1, extra.flattenSides, true);
+			tubShell.y *= map(Math.sin(r*radAng/2), 0, 1, extra.flattenTop, 1, true);
+			tubShell.applyAxisAngle(new THREE.Vector3(1, 0, 0), extra.flattenAngle);
 
-			var vert = strech.clone().add(rad).add(tubShell);
+
+			var vert = rad.clone().add(tubShell);
 			geo.vertices.push(new THREE.Vector3(vert.x, vert.y, vert.z));
 
 			// set face indices (build two triangles in front of the vertex- next index in row,column, wraped around to 0)
@@ -103,137 +117,20 @@ Ring.prototype.RingGeometry = function(radius, thickness, radialSegments, tubula
 		}
 	}
 
-
-	if (extra.flatten) {
-		// flatten below radius
-		geo.vertices.forEach(function(item, index) {
-			var item2d = new THREE.Vector3(item.x, item.y, 0);
-			if (zero.distanceTo(item2d) < radius) {
-				item2d.setLength(radius);
-				item.x = item2d.x;
-				item.y = item2d.y;
-			}
-		});
-	}
-
 	geo.computeFaceNormals();
-	// geo.computeVertexNormals();
+	geo.computeVertexNormals();
 	geo.computeBoundingSphere();
-
 	return geo;
 }
 
 
 
-// Ring.prototype.RingGeometry = function(radius, thickness, radialSegments, tubularSegments, arc, extrude, stride)
-// {
-// 	var geo = new THREE.TorusGeometry(radius, thickness, radialSegments, tubularSegments, arc);
-// 	// get maximum z
-// 	var maxZ=-99999;
-// 	var maxY=-99999;
-// 	geo.vertices.forEach(function(item, index) {
-// 		if (item.z > maxZ) { maxZ = item.z; };
-// 	});
-// 	var factor = (thickness+extrude)/maxZ;
-// 	var zero = new THREE.Vector3(0,0,0);
-// 	geo.vertices.forEach(function(item, index) {
-// 		// strech z
-// 		item.z *= factor;
-
-// 		// flatten below radius
-// 		var item2d = new THREE.Vector3(item.x, item.y, 0);
-// 		if (zero.distanceTo(item2d) < radius) {
-// 			item2d.setLength(radius);
-// 			item.x = item2d.x;
-// 			item.y = item2d.y;
-// 		}
-
-// 		// make stride
-// 		// var yCoeff = item.y/maxY;
-// 		// console.log("maxY = " + maxY);
-// 		var yCoeff = item.y/(radius+thickness);
-// 		item.z += yCoeff*(stride/2);
-
-// 		// make stride (keep top and bottom)
-// 		//
-// 		//if (item.y < radius && item.y > -radius) {
-// 		//	var yCoeff = item.y/maxY;
-// 		//	item.z += yCoeff*(stride/2);
-// 		//}
-// 		//else {
-// 		//	item.z += (item.y>0)?stride/2:-stride/2;
-// 		//}
-
-
-
-// 	});
-// 	geo.computeFaceNormals();
-// 	geo.computeVertexNormals();
-
-// 	geo.verticesNeedUpdate = true;
-// 	geo.normalsNeedUpdate = true;
-// 	return geo;
-// }
-
-
 Ring.prototype.update = function()
 {
-	// update shape
-	/*
-	for (var i=0; i<this.shapeParticles.length; i++)
-	{
-		this.shapeParticles[i].update();
-	}
-
-	// update extruded triangles
-	for (var i=0; i<this.particles.length; i++)
-	{
-		this.particles[i].update();
-	}
-
-	this.geo.computeFaceNormals();
-	this.geo.computeVertexNormals();
-	this.geo.verticesNeedUpdate = true;
-	this.geo.normalsNeedUpdate = true;
-
-
-	// update normals and positions of the vertices
-	for (var i=0; i<this.extrusionFaces.length; i++)
-	{
-		var face = this.extrusionFaces[i];
-		face.geo.computeFaceNormals();
-		face.geo.computeVertexNormals();
-		face.geo.verticesNeedUpdate = true;
-		face.geo.normalsNeedUpdate = true;
-	}
-
-	// scale object to a fixed size
-	var max = this.getMax();
-	var scale = this.size/max;
-	this.scale.set(scale, scale, scale);
-	reversedScale = max/this.size;
-
-	// console.log(max);
-	*/
 }
 
 Ring.prototype.reset = function()
 {
-	/*
-	// update shape
-	for (var i=0; i<this.shapeParticles.length; i++)
-	{
-		shapeMappingData[i] = 0;
-		this.shapeParticles[i].reset();
-	}
-
-	// update extruded triangles
-	for (var i=0; i<this.particles.length; i++)
-	{
-		mappingData[i] = 0;
-		this.particles[i].reset();
-	}
-	*/
 }
 
 
@@ -392,5 +289,27 @@ function equals(v1, v2)
 	}
 }
 
+var FLT_EPSILON = 0.0001
+
+function map(value, inputMin, inputMax, outputMin, outputMax, clamp) {
+
+	if (Math.abs(inputMin - inputMax) < FLT_EPSILON){
+		return outputMin;
+	} else {
+		var outVal = ((value - inputMin) / (inputMax - inputMin) * (outputMax - outputMin) + outputMin);
+
+		if( clamp ){
+			if(outputMax < outputMin){
+				if( outVal < outputMax )outVal = outputMax;
+				else if( outVal > outputMin )outVal = outputMin;
+			}else{
+				if( outVal > outputMax )outVal = outputMax;
+				else if( outVal < outputMin )outVal = outputMin;
+			}
+		}
+		return outVal;
+	}
+
+}
 
 

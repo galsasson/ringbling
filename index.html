@@ -8,20 +8,25 @@
     <script src="js/libs/dat.gui.js"></script>
     <script src="js/libs/STLExporter.js"></script>
     <script src="js/libs/download.js"></script>
+    <script src="js/libs/ThreeCSG_new.js"></script>
+    <script src="js/siris_sizes.js"></script>
     <script src="js/ResourceManager.js"></script>
     <script src="js/ParametricApp.js"></script>
     <script src="js/Ring2.js"></script>
     <script src="js/RingBling.js"></script>
     <link href='http://fonts.googleapis.com/css?family=Alegreya+Sans+SC' rel='stylesheet' type='text/css'>
+    <script type="text/javascript">
+        var app = ParametricApp();
+    </script>
 </head>
-<body onLoad="onLoad();" style="overflow:hidden; width:100%; height:100%; padding: 0px; margin: 0px;">
+<body onLoad="app.loadModel('container',window.innerWidth,window.innerHeight,true, false);" style="overflow:hidden; width:100%; height:100%; padding: 0px; margin: 0px;">
 
 
     <!-- three.js takes over this div (see ParametericApp.js) -->
     <div id="container" style="padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"></div>
 
    <div style="padding: 0px; margin: 0px; position: absolute; left: 20px; bottom: 20px; width: 300px; color: #ddd; font-size: 16px; font-family: 'Alegreya Sans SC', sans-serif;">
-        <a href="#" style="color:#fff;" onclick="downloadModel();">Download STL Model</a>
+        <a href="#" style="color:black;" onclick="app.downloadModel();">Download STL Model</a>
     </div>
 
 </body>
