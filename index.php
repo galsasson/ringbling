@@ -116,7 +116,8 @@
             }
             $("#downloadAllButton").text("Download All (" + numberOfSplints + ")");
             // Model container needs to be inserted before it can be loaded
-
+            $("#splint"+ numberOfSplints +"Measurement1").change(updateSize1);
+            $("#splint"+ numberOfSplints +"Measurement2").change(updateSize2);
             models["splint"+numberOfSplints+"Model"]  = ParametricApp();
             models["splint"+numberOfSplints+"Model"].loadModel("splint"+numberOfSplints+"Model", modelWidth, modelHeight, false, true);
         });
