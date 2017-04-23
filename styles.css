@@ -134,7 +134,7 @@ main > header > h1 {
     margin-bottom:24px;
 }
 main > header > h1, main > header > h2 {
-    width:794px;
+    max-width:794px;
 }
 main > header > h2 {
     font-size:12pt;
