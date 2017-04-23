@@ -43,15 +43,23 @@
         models["splint"+numberOfSplints+"Model"]  = ParametricApp();
         models["splint"+numberOfSplints+"Model"].loadModel("splint"+numberOfSplints+"Model", modelWidth, modelHeight, false, true);
     });
+    function disableDownloadAllButton() {
+        $("#downloadAllButton").prop("disabled", true);
+        $("#downloadAllButton").text("Processing your download…");
+    }
+    function enableDownloadAllButton() {
+        $("#downloadAllButton").prop("disabled", false);
+        $("#downloadAllButton").text("Download All (" + $(".splints .splint").length + ")");
+    }
     function downloadAll() {
         var modelsData = [];
+        disableDownloadAllButton();
         for (var splintNumber = 1; splintNumber <= $(".splints .splint").length; splintNumber++) {
             modelsData.push(models["splint" + splintNumber + "Model"].downloadModel(
                 $("#splintName" + splintNumber).val(),
                 "ADD_FILE_TO_ZIP"
             ));
         }
-        console.log(modelsData);
         addFilesToZip(modelsData);
     }
     function addFilesToZip(modelsData) {
@@ -70,6 +78,7 @@
                     addFileToZip(model_index+1);
                 } else {
                     window.location = "download.php";
+                    enableDownloadAllButton();
                 }
             });
         }

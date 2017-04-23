@@ -240,6 +240,13 @@ main > .splints .removeSplint {
     line-height:32px;
     border-radius:60px;
 }
+#downloadAllButton:disabled {
+    background:#999999;
+}
+#downloadAllButton:disabled:hover {
+    background:#999999;
+    cursor:auto;
+}
 footer {
     min-height:100px;
     width:100%;
