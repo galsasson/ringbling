@@ -13,8 +13,8 @@
         var splintMeasurement2 = newSplint.find(".splintMeasurement2 input");
 
         newSplint.data("splintNumber", numberOfSplints);
-        splintName.attr("id", "splint" + numberOfSplints);
-        splintName.attr("name", "splint" + numberOfSplints);
+        splintName.attr("id", "splintName" + numberOfSplints);
+        splintName.attr("name", "splintName" + numberOfSplints);
         splintName.attr("value", "Splint " + numberOfSplints);
         newSplint.find(".splintName label").attr("for", "splint" + numberOfSplints);
 
@@ -34,6 +34,7 @@
         newSplint.insertBefore($("#addSplint"));
         if ($("#downloadAllButton").length === 0) {
             $("main").append(downloadAllButton);
+            downloadAllButton.addEventListener("click",downloadAll);
         }
         $("#downloadAllButton").text("Download All (" + numberOfSplints + ")");
         // Model container needs to be inserted before it can be loaded
@@ -42,6 +43,18 @@
         models["splint"+numberOfSplints+"Model"]  = ParametricApp();
         models["splint"+numberOfSplints+"Model"].loadModel("splint"+numberOfSplints+"Model", modelWidth, modelHeight, false, true);
     });
+    function downloadAll() {
+        for (var splintNumber = 1; splintNumber < $(".splints .splint").length; splintNumber++) {
+            models["splint" + splintNumber + "Model"].downloadModel(
+                $("#splintName" + splintNumber).val(),
+                "ADD_FILE_TO_ZIP"
+            );
+        }
+        models["splint" + $(".splints .splint").length + "Model"].downloadModel(
+            $("#splintName" + $(".splints .splint").length).val(),
+            "ADD_FILE_TO_ZIP_AND_DOWNLOAD"
+        );
+    }
     function clickRemoveSplint(e) {
         $(e.target).parents(".splint").remove();
     }
@@ -49,7 +62,7 @@
 
     function downloadSplintFile(e) {
         var splintNumber = $(e.target).parents(".splint").data("splintNumber");
-        models["splint" + splintNumber + "Model"].downloadModel($(e.target).parents(".splint").find(".splintName input").val());
+        models["splint" + splintNumber + "Model"].downloadModel($("#splintName" + splintNumber).val());
     }
     $(".downloadButton").click(downloadSplintFile);
 

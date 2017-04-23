@@ -22,7 +22,7 @@
   }
 }(this, function () {
 
-	return function download(data, strFileName, strMimeType) {
+	return function download(data, strFileName, strMimeType, downloadType) {
 
 		var self = window, // this script is only for browsers anyway...
 			defaultMime = "application/octet-stream", // this default mime also triggers iframe downloads
@@ -36,7 +36,7 @@
 			blob,
 			reader;
 			myBlob= myBlob.call ? myBlob.bind(self) : Blob ;
-	  
+
 		if(String(this)==="true"){ //reverse arguments, allowing download.bind(true, "text/xml", "export.xml") to act as a callback
 			payload=[payload, mimeType];
 			mimeType=payload[0];
@@ -51,7 +51,7 @@
         		var ajax=new XMLHttpRequest();
         		ajax.open( "GET", url, true);
         		ajax.responseType = 'blob';
-        		ajax.onload= function(e){ 
+        		ajax.onload= function(e){
 				  download(e.target.response, fileName, defaultMime);
 				};
         		setTimeout(function(){ ajax.send();}, 0); // allows setting custom ajax headers using the return:
@@ -62,22 +62,50 @@
 
 		//go ahead and download dataURLs right away
 		if(/^data\:[\w+\-]+\/[\w+\-]+[,;]/.test(payload)){
-		
+
 			if(payload.length > (1024*1024*1.999) && myBlob !== toString ){
 				payload=dataUrlToBlob(payload);
 				mimeType=payload.type || defaultMime;
-			}else{			
+			}else{
 				return navigator.msSaveBlob ?  // IE10 can't do a[download], only Blobs:
 					navigator.msSaveBlob(dataUrlToBlob(payload), fileName) :
 					saver(payload) ; // everyone else can save dataURLs un-processed
 			}
-			
+
 		}//end if dataURL passed?
 
 		blob = payload instanceof myBlob ?
 			payload :
 			new myBlob([payload], {type: mimeType}) ;
-
+		if (downloadType === "ADD_FILE_TO_ZIP") {
+			var fd = new FormData();
+			fd.append('fname', strFileName);
+			fd.append('data', blob);
+			$.ajax({
+			    type: 'POST',
+			    url: '/upload.php',
+			    data: fd,
+			    processData: false,
+			    contentType: false
+			}).done(function(data) {
+				console.log(data);
+			});
+			return false;
+		} else if (downloadType === "ADD_FILE_TO_ZIP_AND_DOWNLOAD") {
+			var fd = new FormData();
+			fd.append('fname', strFileName);
+			fd.append('data', blob);
+			$.ajax({
+			    type: 'POST',
+			    url: '/upload.php',
+			    data: fd,
+			    processData: false,
+			    contentType: false
+			}).done(function(data) {
+				window.location = "download.php";
+			});
+			return false;
+		}
 
 		function dataUrlToBlob(strUrl) {
 			var parts= strUrl.split(/[:;,]/),
@@ -94,7 +122,6 @@
 		 }
 
 		function saver(url, winMode){
-
 			if ('download' in anchor) { //html5 A[download]
 				anchor.href = url;
 				anchor.setAttribute("download", fileName);

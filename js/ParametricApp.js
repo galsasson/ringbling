@@ -253,7 +253,7 @@ function ParametricApp() {
         renderer.render(scene, camera);
     }
 
-    function downloadModel(filename)
+    function downloadModel(filename, downloadType)
     {
         if (!filename || filename=="") {
             filename = "splint";
@@ -262,7 +262,7 @@ function ParametricApp() {
         ring.updateMatrixWorld(true);
         exporter = new THREE.STLExporter();
         var data = exporter.exportScene(ring);
-        download(data, filename+".stl", "application/sla");
+        download(data, filename+".stl", "application/sla", downloadType);
     }
 
     var currentClip = 0;
