@@ -29,7 +29,7 @@
     <main>
         <header>
             <h1>Model your 3D-printable custom ring splints</h1>
-            <h2>Enter your <a href="/faq/#siris">Siris ring sizes</a> below and watch as your custom ring splint is designed. Click <span class="downloadButtonMock">Download</span> to download an <a href="/faq/#stl">.stl file</a> for each 3D model, which you can use to <a href="/faq/#print">3D print your ring splints</a>.</h2>
+            <h2>Enter your <a href="/faq/#sizer">Siris ring sizes</a> below and watch as your custom ring splint is designed. Click <span class="downloadButtonMock">Download</span> to download an <a href="/faq/#stl">.stl file</a> for each 3D model, which you can use to <a href="/faq/#print">3D print your ring splints</a>.</h2>
         </header>
         <section class="splints">
             <article class="splint" data-splint-number="1">
