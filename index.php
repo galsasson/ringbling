@@ -38,11 +38,11 @@
                     <label for="splintName1">Splint name</label>
                 </fieldset>
                 <fieldset class="splintMeasurement splintMeasurement1">
-                    <input min="1" max="16" id="splint1Measurement1" name="splint1Measurement1" value="10" type="number" />
+                    <input min="1" max="40" id="splint1Measurement1" name="splint1Measurement1" value="10" type="number" />
                     <label for="splint1Measurement1">Ring 1 Size</label>
                 </fieldset><!--
                 --><fieldset class="splintMeasurement splintMeasurement2">
-                    <input min="1" max="16" id="splint1Measurement2" name="splint1Measurement2" value="10" type="number" />
+                    <input min="1" max="40" id="splint1Measurement2" name="splint1Measurement2" value="10" type="number" />
                     <label for="splint1Measurement2">Ring 2 Size</label>
                 </fieldset>
                 <br />
@@ -63,11 +63,11 @@
                 <label for="splintNameN">Splint name</label>
             </fieldset>
             <fieldset class="splintMeasurement splintMeasurement1">
-                <input min="1" max="16" id="splintNMeasurement1" name="splintNMeasurement1" value="10" type="number" />
+                <input min="1" max="40" id="splintNMeasurement1" name="splintNMeasurement1" value="10" type="number" />
                 <label for="splintNMeasurement1">Ring 1 Size</label>
             </fieldset><!--
             --><fieldset class="splintMeasurement splintMeasurement2">
-                <input min="1" max="16" id="splintNMeasurement2" name="splintNMeasurement2" value="10" type="number" />
+                <input min="1" max="40" id="splintNMeasurement2" name="splintNMeasurement2" value="10" type="number" />
                 <label for="splintNMeasurement2">Ring 2 Size</label>
             </fieldset>
             <br />
