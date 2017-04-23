@@ -480,7 +480,9 @@ function ParametricApp() {
     return {
         "loadModel" : loadModel,
         "downloadModel" : downloadModel,
-        "ring" : ring
+        "ring" : ring,
+        "onSizeChange1" : onSizeChange1,
+        "onSizeChange2" : onSizeChange2
     };
 }
 
