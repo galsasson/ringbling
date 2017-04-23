@@ -2,8 +2,8 @@ Ring = function()
 {
 	THREE.Object3D.call(this);
 
-	this.height = 14;
-	this.width = 12;
+	this.height = siris_sizes['10'][0];
+	this.width = siris_sizes['10'][0];
 	this.thickness = 3;
 	this.radialSegments = 128;
 	this.tubularSegments = 32;

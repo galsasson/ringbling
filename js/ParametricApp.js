@@ -181,11 +181,25 @@ function ParametricApp() {
     }
 
     function onSizeChange1(value) {
-
+        if (siris_sizes[value]) {
+            ring.ringr.height = siris_sizes[value][0];
+            ring.ringr.width = siris_sizes[value][1];
+            ring.updateGeometry(ring);
+        }
+        else {
+            console.log("Sorry, no such ring size");
+        }
     }
 
     function onSizeChange2(value) {
-
+        if (siris_sizes[value]) {
+            ring.ringl.height = siris_sizes[value][0];
+            ring.ringl.width = siris_sizes[value][1];
+            ring.updateGeometry(ring);
+        }
+        else {
+            console.log("Sorry, no such ring size");
+        }
     }
 
     //***************************************************************************//
@@ -244,6 +258,8 @@ function ParametricApp() {
 
     function onKeyDown(evt)
     {
+        return;
+
         var keyCode = getKeyCode(evt);
         keyPressed[keyCode] = true;
 
