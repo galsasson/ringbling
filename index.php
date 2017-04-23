@@ -127,7 +127,7 @@
 
         function downloadSplintFile(e) {
             var splintNumber = $(e.target).parents(".splint").data("splintNumber");
-            models["splint" + splintNumber + "Model"].downloadModel();
+            models["splint" + splintNumber + "Model"].downloadModel($(e.target).parents(".splint").find(".splintName input").val());
         }
         $(".downloadButton").click(downloadSplintFile);
 

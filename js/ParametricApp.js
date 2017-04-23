@@ -253,13 +253,16 @@ function ParametricApp() {
         renderer.render(scene, camera);
     }
 
-    function downloadModel()
+    function downloadModel(filename)
     {
-        console.log("exporting stl");
+        if (!filename || filename=="") {
+            filename = "splint";
+        }
+
         ring.updateMatrixWorld(true);
         exporter = new THREE.STLExporter();
         var data = exporter.exportScene(ring);
-        download(data, "ringbling.stl", "application/sla");
+        download(data, filename+".stl", "application/sla");
     }
 
     var currentClip = 0;
