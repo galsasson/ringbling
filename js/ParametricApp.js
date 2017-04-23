@@ -39,7 +39,7 @@ function ParametricApp() {
     //***************************************************************************//
     // initialize the renderer, scene, camera, and lights                        //
     //***************************************************************************//
-    function loadModel(id, width, height, showGUI)
+    function loadModel(id, width, height, showGUI, disableZoom)
     {
         // Grab our container div
         var container = document.getElementById(id);
@@ -57,11 +57,12 @@ function ParametricApp() {
         scene = new THREE.Scene();
 
         // Put in a camera
-        camera = new THREE.PerspectiveCamera( 20,
+        camera = new THREE.PerspectiveCamera( 10,
             width / height, 1, 10000 );
 
         camera.position.set(camAngles[0].x, camAngles[0].y, camAngles[0].z);
         controls = new THREE.OrbitControls(camera, container);
+        controls.noZoom = disableZoom;
         controls.addEventListener( 'change', render );
         // console.log(controls);
         controls.target.set(camAngles[0].tx, camAngles[0].ty, camAngles[0].tz);

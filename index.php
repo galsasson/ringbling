@@ -115,7 +115,7 @@
             // Model container needs to be inserted before it can be loaded
 
             models["splint"+numberOfSplints+"Model"]  = ParametricApp();
-            models["splint"+numberOfSplints+"Model"].loadModel("splint"+numberOfSplints+"Model", 587, 289, false);
+            models["splint"+numberOfSplints+"Model"].loadModel("splint"+numberOfSplints+"Model", 587, 289, false, true);
         });
         function clickRemoveSplint(e) {
             $(e.target).parents(".splint").remove();
@@ -130,7 +130,7 @@
 
         models = {"splint1Model" : ParametricApp()};
 
-        models["splint1Model"].loadModel("splint1Model", 587, 289, false);
+        models["splint1Model"].loadModel("splint1Model", 587, 289, false, true);
     </script>
   </body>
 </html>
