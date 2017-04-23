@@ -28,6 +28,10 @@ a {
 }
 a:hover {
     color:#F44336;
+    cursor:pointer;
+}
+a img:hover {
+    cursor:pointer;
 }
 input {
     color:black;
@@ -86,6 +90,8 @@ html, body, header, h1, h2, h3 {
 }
 main > .splints .downloadButton, #downloadAllButton {
     letter-spacing:2px;
+    padding:10px 20px;
+    font-size:12pt;
 }
 main > .splints .downloadButton:hover, #downloadAllButton:hover {
     background:#0031CA;
@@ -144,8 +150,8 @@ main > header > h1 {
     margin-top:24px;
     margin-bottom:24px;
 }
-main > header > h1, main > header > h2 {
-    max-width:794px;
+main > header > h1, main > header > h2, footer p {
+    max-width:900px;
 }
 main > header > h2 {
     font-size:12pt;
@@ -153,7 +159,7 @@ main > header > h2 {
     margin-bottom:21px;
 }
 main > .splints {
-    margin: 40px 0 100px 0;
+    margin: 40px 0 40px 0;
     position:relative;
 }
 main > .splints .splint {
@@ -194,9 +200,6 @@ main > .splints .downloadButton {
     bottom:40px;
     left:40px;
     position:absolute;
-    padding:10px 20px;
-    font-size:12pt;
-    border-radius:50px;
 }
 main > .splints .removeSplint {
     position:absolute;
@@ -205,6 +208,9 @@ main > .splints .removeSplint {
     right:40px;
     color:black;
     border:none;
+}
+main > .splints .model3d {
+    cursor:move;
 }
 #addSplint {
     position:absolute;
@@ -230,14 +236,11 @@ main > .splints .removeSplint {
     bottom:36px;
 }
 #downloadAllButton {
-    margin:20px 0;
-    padding:15px 30px;
     color:white;
     background-color:#3D5AFE;
     position:relative;
     margin-left:40px;
     margin-bottom:60px;
-    line-height:32px;
     border-radius:60px;
 }
 #downloadAllButton:disabled {
@@ -253,6 +256,10 @@ footer {
     color:black;
     padding:40px;
     font-size:16pt;
+}
+footer p {
+    margin:0;
+    padding:0;
 }
 
 /* Responsive updates */
@@ -280,6 +287,7 @@ footer {
     }
     #downloadAllButton {
         font-size:16pt;
+        margin:20px 0;
     }
 }
 @media (min-width: 800px) {
@@ -299,7 +307,8 @@ footer {
         width:175px;
     }
     #downloadAllButton {
-        font-size:24pt;
+        font-size:12pt;
+        margin:0 0 20px 40px;
     }
 }
 @media (min-width: 1050px) {

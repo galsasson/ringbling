@@ -73,9 +73,7 @@
 </article><!--
       --></section>
     </main>
-    <footer>
-      RingBling.org is a project sponsored by Tikkun Olam Makers (TOM), a registered non-profit organization. It was created by volunteers and is completely open source.
-    </footer>
+    <footer><p>RingBling.org is a project sponsored by Tikkun Olam Makers (TOM), a registered non-profit organization. It was created by volunteers and is completely open source.</p></footer>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type='text/javascript'>
       function toggleTOCFixedPosition() {
