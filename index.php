@@ -81,7 +81,7 @@
         var models = [];
         var downloadAllButton = document.createElement("button");
         var modelWidth = 587 > (window.innerWidth - 80) ? window.innerWidth - 80 : 587;
-        var modelHeight = 289 > window.innerHeight ? window.innerHeight : 289;
+        var modelHeight = modelWidth * .5;
         downloadAllButton.id = "downloadAllButton";
 
         $("#addSplint").click(function(e) {
