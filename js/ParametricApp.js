@@ -180,6 +180,14 @@ function ParametricApp() {
         style.add(ring.ringl.extra, 'clamp').onChange(function() {ring.updateGeometry(ring)});
     }
 
+    function onSizeChange1(value) {
+
+    }
+
+    function onSizeChange2(value) {
+
+    }
+
     //***************************************************************************//
     // render loop                                                               //
     //***************************************************************************//
