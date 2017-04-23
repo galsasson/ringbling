@@ -218,14 +218,13 @@ main > .splints .removeSplint {
     bottom:36px;
 }
 #downloadAllButton {
-    margin-top:20px 0;
+    margin:20px 0;
     padding:15px 30px;
     color:white;
     background-color:#3D5AFE;
     position:relative;
     margin-left:40px;
     margin-bottom:60px;
-    font-size:24pt;
     line-height:32px;
     border-radius:60px;
 }
@@ -266,6 +265,9 @@ footer a {
     main > .splints .splintMeasurement input{
         width:100%;
     }
+    #downloadAllButton {
+        font-size:16pt;
+    }
 }
 @media (min-width: 800px) {
     main > .splints .splint .splintName input {
@@ -282,6 +284,9 @@ footer a {
     }
     main > .splints .splintMeasurement input{
         width:175px;
+    }
+    #downloadAllButton {
+        font-size:24pt;
     }
 }
 @media (min-width: 1050px) {
