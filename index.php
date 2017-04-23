@@ -36,11 +36,11 @@
                     <input id="splintName1" name="splintName1" value="Splint 1" type="text" />
                     <label for="splintName1">Splint name</label>
                 </fieldset>
-                <fieldset class="splintMeasurement1">
+                <fieldset class="splintMeasurement splintMeasurement1">
                     <input min="1" max="16" id="splint1Measurement1" name="splint1Measurement1" value="1" type="number" />
                     <label for="splint1Measurement1">Ring 1 Size</label>
-                </fieldset>
-                <fieldset class="splintMeasurement2">
+                </fieldset><!--
+                --><fieldset class="splintMeasurement splintMeasurement2">
                     <input min="1" max="16" id="splint1Measurement2" name="splint1Measurement2" value="1" type="number" />
                     <label for="splint1Measurement2">Ring 2 Size</label>
                 </fieldset>
@@ -64,8 +64,8 @@
             <fieldset class="splintMeasurement1">
                 <input min="1" max="16" id="splintNMeasurement1" name="splintNMeasurement1" value="1" type="number" />
                 <label for="splintNMeasurement1">Ring 1 Size</label>
-            </fieldset>
-            <fieldset class="splintMeasurement2">
+            </fieldset><!--
+            --><fieldset class="splintMeasurement2">
                 <input min="1" max="16" id="splintNMeasurement2" name="splintNMeasurement2" value="1" type="number" />
                 <label for="splintNMeasurement2">Ring 2 Size</label>
             </fieldset>
@@ -121,12 +121,23 @@
             $(e.target).parents(".splint").remove();
         }
         $(".removeSplint").click(clickRemoveSplint);
+
         function downloadSplintFile(e) {
-            console.log("Attempting to download");
             var splintNumber = $(e.target).parents(".splint").data("splintNumber");
             models["splint" + splintNumber + "Model"].downloadModel();
         }
         $(".downloadButton").click(downloadSplintFile);
+
+        function updateSize1(e) {
+            var splintNumber = $(e.target).parents(".splint").data("splintNumber");
+            models["splint" + splintNumber + "Model"].onSizeChange1(e.target.value);
+        }
+        $("#splint1Measurement1").change(updateSize1);
+        function updateSize2(e) {
+            var splintNumber = $(e.target).parents(".splint").data("splintNumber");
+            models["splint" + splintNumber + "Model"].onSizeChange2(e.target.value);
+        }
+        $("#splint1Measurement2").change(updateSize2);
 
         models = {"splint1Model" : ParametricApp()};
 
