@@ -19,6 +19,14 @@ main > section {
 #toc {
   vertical-align:top;
 }
+#tocfixed {
+  position:fixed;
+  top:0px;
+  left:40px;
+  display:none;
+  background:white;
+  padding-top:40px;
+}
 #content {
   vertical-align:top;
 }
@@ -55,8 +63,10 @@ iframe {
 }
 
 @media (min-width:960px) {
-  #toc {
+  #toc, #tocfixed {
     width:278px;
+  }
+  #toc {
     display:inline-block;
   }
   #content {

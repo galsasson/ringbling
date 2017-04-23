@@ -31,6 +31,20 @@
           <li><a href="#print">Can you print my Ring Bling for me?</a></li>
           <li><a href="#aboutus">Who created this tool?</a></li>
         </article><!--
+        --><!--
+        --><article id="tocfixed">
+        <ul>
+          <li><a href="#whatis">What is Ring Bling?</a></li>
+          <li><a href="#sizer">I don't have a sizer. Where do I get them?</a></li>
+          <li><a href="#ringsizer">Can't I just use a standard jeweler's ring sizer?</a></li>
+          <li><a href="#howto">Help! How do I use EZ sizers?</a></li>
+          <li><a href="#stl">What is an .stl file?</a></li>
+          <li><a href="#stlnextsteps">I have the .stl file. What now?</a></li>
+          <li><a href="#materials">What materials can I use to print my Ring Bling ring splints?</a></li>
+          <li><a href="#color">How do I change the color of my Ring Bling?</a></li>
+          <li><a href="#print">Can you print my Ring Bling for me?</a></li>
+          <li><a href="#aboutus">Who created this tool?</a></li>
+        </article><!--
         --><article id="content">
 <h3 id="whatis">What is Ring Bling?</h2>
   <p>Ring Bling is an open-source web application that generates 3D models which can be used to 3D print customizable swan neck ring splints. We aim to provide a simple and cost-effective alternative for therapists and clients to obtain customizable splints, especially at smaller sizes that are expensive to obtain elsewhere.</p>
@@ -62,5 +76,17 @@
     <footer>
       RingBling.org is a project sponsored by Tikkun Olam Makers (TOM), a registered non-profit organization. It was created by volunteers and is completely open source.
     </footer>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type='text/javascript'>
+      function toggleTOCFixedPosition() {
+        if (window.innerWidth > 960 && $(window).scrollTop() >= 295) {
+          $("#tocfixed").show();
+        } else if ((window.innerWidth < 960 || $(window).scrollTop() < 295)) {
+          $("#tocfixed").hide();
+        }
+      }
+      window.addEventListener("scroll", toggleTOCFixedPosition);
+      window.addEventListener("resize", toggleTOCFixedPosition);
+    </script>
   </body>
 </html>
