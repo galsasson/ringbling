@@ -21,6 +21,8 @@ Ring = function()
 	this.extra.flattenTop = 0.6;
 	this.extra.flattenAngle = 0;
 	this.extra.trueTubOrientation = false;
+	this.bridgePointR = null;
+	this.bridgePointL = null;
 }
 Ring.prototype = Object.create(THREE.Object3D.prototype);
 
@@ -43,6 +45,8 @@ Ring.prototype.updateGeometry = function(that)
 
 Ring.prototype.RingGeometry = function(width, height, thickness, radialSegments, tubularSegments, arc, extra)
 {
+	this.bridgePointR = null;
+	this.bridgePointL = null;
 	var geo = new THREE.Geometry();
 
 	width = width || 12;
@@ -97,6 +101,10 @@ Ring.prototype.RingGeometry = function(width, height, thickness, radialSegments,
 		}
 		else {
 			var rotAxis = rad.clone().normalize().applyAxisAngle(new THREE.Vector3(0, 0, 1), Math.PI/2);
+		}
+
+		if (r >= radialSegments/4 && this.bridgePointL==null) {
+			this.bridgePointL = rad;
 		}
 
 		for (var t=0; t<tubularSegments; t++)

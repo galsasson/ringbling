@@ -145,6 +145,7 @@ function ParametricApp() {
 
         gui.add(ring, 'ringsOffset', -6, 0).onChange(function() {ring.updateGeometry(ring)});
         gui.add(ring, 'angle', 0, Math.PI/2).onChange(function() {ring.updateGeometry(ring)});
+        gui.add(ring, 'supportAngle', 0, Math.PI*2).onChange(function() {ring.updateGeometry(ring)});
 
         var ringG = gui.addFolder("RIGHT RING");
         ringG.add(ring.ringr, 'width', 0, 30).onChange(function() {ring.updateGeometry(ring)});

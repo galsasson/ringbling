@@ -4,8 +4,12 @@ RingBling = function()
 
 	this.ringsOffset = 0;
 	this.angle = Math.PI/4;
+	this.supportRad = 1;
+	this.supportAngle = Math.PI*3/4;
 	this.ringl = null;
 	this.ringr = null;
+	this.supportl = null;
+	this.supportr = null;
 }
 RingBling.prototype = Object.create(THREE.Object3D.prototype);
 
@@ -25,13 +29,38 @@ RingBling.prototype.init = function()
 	this.ringl.init();
 	this.add(this.ringr);
 	this.add(this.ringl);
+
+	this.createSupports();
+
 	this.align();
+}
+
+RingBling.prototype.createSupports = function()
+{
+	if (this.supportl) {
+		this.remove(this.supportl);
+	}
+
+	// support
+	var lheight = this.ringl.height+this.ringl.thickness;
+	var lwidth = this.ringl.width+this.ringl.thickness;
+	var rheight = this.ringr.height+this.ringr.thickness;
+	var rwidth = this.ringr.width+this.ringr.thickness;
+
+	var supportLength = 0.5*lheight*Math.sin(this.angle)+0.5*rheight*Math.sin(this.angle)+this.ringsOffset;
+	var geo = new THREE.CylinderGeometry(this.supportRad, this.supportRad, supportLength, 32);
+	this.supportl = new THREE.Mesh(geo, resMgr.materials.object);
+	this.supportl.rotation.set(Math.PI/2, 0, 0);
+	this.supportl.position.set(lwidth/2*Math.cos(this.supportAngle+Math.PI/2), lheight/2*Math.sin(this.supportAngle+Math.PI/2), 0);
+	this.add(this.supportl);
 }
 
 RingBling.prototype.updateGeometry = function(that)
 {
 	that.ringl.updateGeometry(that.ringl);
 	that.ringr.updateGeometry(that.ringr);
+
+	this.createSupports();
 
 	that.align();
 }
@@ -47,6 +76,8 @@ RingBling.prototype.align = function()
 
 	this.ringl.position.set(0, 0.5*lheight*Math.sin(this.angle), -0.5*lheight*Math.sin(this.angle));
 	this.ringr.position.set(0, 0.5*rheight*Math.sin(this.angle), 0.5*rheight*Math.sin(this.angle)+this.ringsOffset);
+
+	this.supportl.position.y += 0.5*lheight*Math.sin(this.angle);
 }
 
 RingBling.prototype.merge = function()
