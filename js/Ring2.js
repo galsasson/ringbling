@@ -89,14 +89,11 @@ Ring.prototype.RingGeometry = function(width, height, thickness, radialSegments,
 
 			var nextRad = new THREE.Vector3(wby2*Math.cos((r+1)*radAng+Math.PI/2), hby2*Math.sin((r+1)*radAng+Math.PI/2), 0);
 			var nextTub = nextRad.clone().normalize().multiplyScalar(thickness);
-
-			// TODO: remove strech
-			var nextStrech = strechVec.clone().add(new THREE.Vector3(0, 0, extra.stride*Math.cos((r+1)*radAng)));
-
-			var rotAxis = nextStrech.add(nextRad).sub(nextTub).sub(strech.clone().add(rad).sub(tub)).normalize();
+			var rotAxis = nextRad.clone().sub(nextTub).sub(rad.clone().sub(tub)).normalize();
 		}
 		else {
 			var rotAxis = rad.clone().normalize().applyAxisAngle(new THREE.Vector3(0, 0, 1), Math.PI/2);
+			// var rotAxis = new THREE.Vector3(1, 0, 0);
 		}
 
 		for (var t=0; t<tubularSegments; t++)
@@ -121,6 +118,7 @@ Ring.prototype.RingGeometry = function(width, height, thickness, radialSegments,
 	}
 
 	geo.computeFaceNormals();
+	geo.computeVertexNormals();
 	geo.computeBoundingSphere();
 	return geo;
 }
