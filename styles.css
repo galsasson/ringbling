@@ -1,7 +1,14 @@
 @font-face {
     font-family: 'WorkSans-Light';
-    src: url('fonts/WorkSans-Light.eot');
-    src: url('fonts/WorkSans-Light.woff') format('woff'), url('fonts/WorkSans-Light.ttf') format('truetype'), url('fonts/WorkSans-Light.svg') format('svg');
+    src: url('/fonts/WorkSans-Light.eot');
+    src: url('/fonts/WorkSans-Light.woff') format('woff'), url('/fonts/WorkSans-Light.ttf') format('truetype'), url('/fonts/WorkSans-Light.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'WorkSans-Regular';
+    src: url('/fonts/WorkSans-Regular.eot');
+    src: url('/fonts/WorkSans-Regular.woff') format('woff'), url('/fonts/WorkSans-Regular.ttf') format('truetype'), url('/fonts/WorkSans-Regular.svg') format('svg');
     font-weight: normal;
     font-style: normal;
 }
@@ -9,6 +16,9 @@
     font-weight:100;
     font-family: 'WorkSans-Light';
     box-sizing:border-box;
+}
+footer * {
+    font-family: 'WorkSans-Regular';
 }
 a {
     text-decoration:none;
@@ -72,6 +82,7 @@ html, body, header, h1, h2, h3 {
     background-color:#3D5AFE;
     border:none;
     border-radius:20px;
+    font-family:'WorkSans-Regular';
 }
 main > .splints .downloadButton, #downloadAllButton {
     letter-spacing:2px;
@@ -203,11 +214,12 @@ main > .splints .removeSplint {
 #addSplint:before {
     content:"Add a splint";
     text-transform:UPPERCASE;
+    font-family:'WorkSans-Regular';
     position:absolute;
-    left:-160px;
+    left:-130px;
     bottom:38px;
     color:#F44336;
-    font-size:18pt;
+    font-size:14pt;
     padding-bottom:3px;
 }
 #addSplint:focus {
@@ -229,18 +241,12 @@ main > .splints .removeSplint {
     border-radius:60px;
 }
 footer {
-    background-color:black;
     min-height:100px;
     width:100%;
-    color:white;
+    color:black;
     padding:40px;
-    font-size:18pt;
+    font-size:16pt;
 }
-footer a {
-    color:white;
-    border-bottom:1px dashed white;
-}
-
 
 /* Responsive updates */
 @media (min-width: 0px) {

@@ -46,7 +46,7 @@
                     <label for="splint1Measurement2">Ring 2 Size</label>
                 </fieldset>
                 <br />
-                <a class="sizerHelp" href="/faq/#sizing">Need help with sizing?</a>
+                <a class="sizerHelp" href="/faq/#sizer">Need help with sizing?</a>
                 <div class="model3d" id="splint1Model"></div>
                 <button class="downloadButton">Download</button>
                 <button class="removeSplint" title="Remove splint"><img width="30" height="30" alt="Close button" src="images/x.svg" /></button>
@@ -54,7 +54,7 @@
             <button title="Add a splint" id="addSplint"><img width="122" height="122" alt="Add Splint Button" src="images/addSplint.svg" /> </button>
         </section>
     </main>
-    <footer>Built at <a href="http://www.nyc.tomglobal.org">TOM NYC</a></footer>
+    <footer>RingBling.org is a project sponsored by Tikkun Olam Makers (TOM), a registered non-profit organization. It was created by volunteers and is completely open source.</footer>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <div class="templates">
         <article class="splint" data-splint-number="N">
@@ -71,7 +71,7 @@
                 <label for="splintNMeasurement2">Ring 2 Size</label>
             </fieldset>
             <br />
-            <a class="sizerHelp" href="/faq/#sizing">Need help with sizing?</a>
+            <a class="sizerHelp" href="/faq/#sizer">Need help with sizing?</a>
             <div class="model3d" id="splintNModel"></div>
             <button class="downloadButton">Download</button>
             <button class="removeSplint" title="Remove splint"><img width="30" height="30" alt="Close button" src="images/x.svg" /></button>
