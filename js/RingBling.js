@@ -12,14 +12,14 @@ RingBling.prototype = Object.create(THREE.Object3D.prototype);
 RingBling.prototype.init = function()
 {
 	this.ringr = new Ring();
-	this.ringr.height = 23;
-	this.ringr.width = 20;
+	this.ringr.height = 24;
+	this.ringr.width = 21;
 	this.ringr.extra.flattenAngle = -Math.PI/4;
 	this.ringr.material = resMgr.materials.ringr;
 	this.ringr.init();
 	this.ringl = new Ring();
-	this.ringl.height = 21;
-	this.ringl.width = 19;
+	this.ringl.height = 22;
+	this.ringl.width = 20;
 	this.ringl.extra.flattenAngle = Math.PI/4;
 	this.ringl.material = resMgr.materials.ringl;
 	this.ringl.init();

@@ -4,7 +4,7 @@ Ring = function()
 
 	this.height = 14;
 	this.width = 12;
-	this.thickness = 1.8;
+	this.thickness = 3;
 	this.radialSegments = 128;
 	this.tubularSegments = 32;
 	this.flaten = 0;
@@ -17,8 +17,8 @@ Ring = function()
 	this.extra.freq = 0;
 	this.extra.clamp = false;
 	this.extra.stride = 0;
-	this.extra.flattenSides = 0.6;
-	this.extra.flattenTop = 0.6;
+	this.extra.flattenSides = 0.35;
+	this.extra.flattenTop = 0.35;
 	this.extra.flattenAngle = 0;
 	this.extra.trueTubOrientation = false;
 }
