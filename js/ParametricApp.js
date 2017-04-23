@@ -61,11 +61,11 @@ function ParametricApp() {
             width / height, 1, 10000 );
 
         camera.position.set(camAngles[0].x, camAngles[0].y, camAngles[0].z);
+        camera.lookAt(new THREE.Vector3(camAngles[0].tx, camAngles[0].ty, camAngles[0].tz));
         controls = new THREE.OrbitControls(camera, container);
         controls.noZoom = disableZoom;
-        controls.addEventListener( 'change', render );
-        // console.log(controls);
         controls.target.set(camAngles[0].tx, camAngles[0].ty, camAngles[0].tz);
+        controls.update();
 
         // add lights
         initSceneLights();
@@ -76,7 +76,7 @@ function ParametricApp() {
         populateScene();
 
         // Add a mouse up handler to toggle the animation
-        addInputHandler();
+        // addInputHandler();
         window.addEventListener( 'resize', onWindowResize, false );
 
         // add gui
@@ -123,6 +123,15 @@ function ParametricApp() {
         spotLight.shadow.camera.far = 1500;
         // spotLight.shadowCameraVisible = true;
         scene.add(spotLight);
+
+        var sspotLight = new THREE.SpotLight(0xFFFFFF, 1);
+        sspotLight.angle = Math.PI/2;
+        sspotLight.exponent = 12;
+        sspotLight.position.set(200, -337, -1015);
+        sspotLight.target.position.set(98, -82, -522);
+        sspotLight.castShadow = true;
+        sspotLight.shadow.camera.far = 1500;
+        scene.add(sspotLight);
     }
 
     //***************************************************************************//
@@ -244,189 +253,20 @@ function ParametricApp() {
         renderer.render(scene, camera);
     }
 
-    //***************************************************************************//
-    // User interaction                                                          //
-    //***************************************************************************//
-    function addInputHandler()
+    function downloadModel(filename)
     {
-        var dom = renderer.domElement;
-        dom.addEventListener('mouseup', onMouseUp, false);
-        dom.addEventListener('mousedown', onMouseDown, false);
-        window.addEventListener('keydown', onKeyDown, false);
-        window.addEventListener('keyup', onKeyUp, false);
-    }
+        if (!filename || filename=="") {
+            filename = "splint";
+        }
 
-    function onKeyDown(evt)
-    {
-        return;
-
-        var keyCode = getKeyCode(evt);
-        keyPressed[keyCode] = true;
-
-        console.log(keyCode);
-
-        if (keyCode == 32) {
-            if (animating) {
-                videoScreen.video.pause();
-            }
-            else {
-                videoScreen.video.play();
-            }
-            animating = !animating;
-        }
-        else if (keyCode >= 48 &&
-                 keyCode < 48+camAngles.length) {
-            var angle = keyCode-48;
-            setCameraAngle(angle);
-        }
-        else if (keyCode == 67) // 'c'
-        {
-            console.log(camera.position);
-            console.log(controls.target);
-        }
-        else if (keyCode == 70) {   // 'f'
-            ring.toggleFaces();
-        }
-        else if (keyCode == 77) {   // 'm'
-            ring.toggleFaceMovement();
-        }
-        else if (keyCode == 82) {   // 'r'
-            resetObject();
-        }
-        else if (keyCode == 65) {   // 'a'
-            nextClip();
-            nextViewAngle();
-        }
-        else if (keyCode == 85) {   // 'u'
-            ring.mergeNew();
-        }
-    }
-
-    function downloadModel()
-    {
-        console.log("exporting stl");
         ring.updateMatrixWorld(true);
         exporter = new THREE.STLExporter();
         var data = exporter.exportScene(ring);
-        download(data, "ringbling.stl", "application/sla");
+        download(data, filename+".stl", "application/sla");
     }
 
     var currentClip = 0;
     var currentViewAngle = 0;
-
-    function nextClip()
-    {
-        currentClip++;
-        if (currentClip >= 8) {
-            currentClip = 0;
-        }
-
-        if (videoScreen.on) {
-            setTimeout(screenToggle, 0);
-        }
-        setTimeout(resetObject, 200);
-        setTimeout(selectChannel, 400);
-        setTimeout(screenToggle, 600);
-        setTimeout(nextClip, remote.channels[currentClip].length + 5000);
-    }
-
-    function nextViewAngle()
-    {
-        setTimeout(function() {setCameraAngle(0);}, 0);
-        setTimeout(function() {setCameraAngle(1);}, 20000);
-        setTimeout(function() {setCameraAngle(2);}, 40000);
-        setTimeout(function() {setCameraAngle(0);}, 50000);
-        setTimeout(function() {setCameraAngle(3);}, 60000);
-        setTimeout(nextViewAngle, 85000);
-    }
-
-    function setCameraAngle(angle)
-    {
-        camPosTarget = new THREE.Vector3(camAngles[angle].x, camAngles[angle].y, camAngles[angle].z);
-        camTargetTarget = new THREE.Vector3(camAngles[angle].tx, camAngles[angle].ty, camAngles[angle].tz);
-    }
-
-    function resetObject()
-    {
-        ring.reset();
-    }
-
-    function screenToggle()
-    {
-    }
-
-    function selectChannel()
-    {
-    }
-
-    function onKeyUp(evt)
-    {
-        var keyCode = getKeyCode(evt);
-
-        keyPressed[keyCode] = false;
-    }
-
-    function onMouseDown(event)
-    {
-        event.preventDefault();
-
-        // stop flying
-        camPosTarget = null;
-        camTargetTarget = null;
-
-        // check intersections with interactive objects
-        var vector = new THREE.Vector3(
-            ( event.clientX / window.innerWidth ) * 2 - 1,
-          - ( event.clientY / window.innerHeight ) * 2 + 1,
-            camera.near);
-        // var projector = new THREE.Projector();
-        // projector.unprojectVector( vector, camera );
-        vector.unproject(camera);
-
-        var ray = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize(), 0, 2000);
-
-        /*
-        var intersections = ray.intersectObject(remote, true);
-        if (intersections.length == 0) {
-            return;
-        }
-
-        var object = intersections[0].object;
-        if (object.handleMouseDown != null)
-        {
-            object.handleMouseDown();
-            pressedObjects.push(object);
-        }
-        */
-
-        // console.log(result);
-    }
-
-    function onMouseUp(event)
-    {
-        event.preventDefault();
-
-        while (pressedObjects.length > 0)
-        {
-            var obj = pressedObjects.pop();
-            if (obj.handleMouseUp != null) {
-                obj.handleMouseUp();
-            }
-        }
-    }
-
-    function onMouseMove(event)
-    {
-        event.preventDefault();
-        if (dragging) {
-            var x = prevMouse.x - event.x;
-            var y = prevMouse.y - event.y;
-            camera.rotation.y -= x/1000;
-
-            prevMouse.x = event.x;
-            prevMouse.y = event.y;
-        }
-    }
 
     function onWindowResize()
     {
