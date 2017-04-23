@@ -3,6 +3,7 @@ RingBling = function()
 	THREE.Object3D.call(this);
 
 	this.ringsOffset = 0;
+	this.angle = Math.PI/4;
 	this.ringl = null;
 	this.ringr = null;
 }
@@ -10,18 +11,20 @@ RingBling.prototype = Object.create(THREE.Object3D.prototype);
 
 RingBling.prototype.init = function()
 {
-	this.ringl = new Ring();
-	this.ringl.height = 17.94;
-	this.ringl.width = 16.43;
-	this.ringl.material = resMgr.materials.ringl;
-	this.ringl.init();
 	this.ringr = new Ring();
-	this.ringr.height = 19.67;
-	this.ringr.width = 17.67;
+	this.ringr.height = 24;
+	this.ringr.width = 21;
+	this.ringr.extra.flattenAngle = -Math.PI/4;
 	this.ringr.material = resMgr.materials.ringr;
 	this.ringr.init();
-	this.add(this.ringl);
+	this.ringl = new Ring();
+	this.ringl.height = 22;
+	this.ringl.width = 20;
+	this.ringl.extra.flattenAngle = Math.PI/4;
+	this.ringl.material = resMgr.materials.ringl;
+	this.ringl.init();
 	this.add(this.ringr);
+	this.add(this.ringl);
 	this.align();
 }
 
@@ -36,11 +39,48 @@ RingBling.prototype.updateGeometry = function(that)
 RingBling.prototype.align = function()
 {
 	// put rings end to end
-	this.ringl.rotation.set(-Math.PI/4, 0, 0);
-	this.ringr.rotation.set(Math.PI/4, 0, 0);
+	this.ringl.rotation.set(-this.angle, 0, 0);
+	this.ringr.rotation.set(this.angle, 0, 0);
 
-	this.ringl.position.set(0, 0.5*this.ringl.height*Math.sin(Math.PI/4), -0.5*this.ringl.height*Math.cos(Math.PI/4));
-	this.ringr.position.set(0, 0.5*this.ringr.height*Math.sin(Math.PI/4), 0.5*this.ringr.height*Math.cos(Math.PI/4)+this.ringsOffset);
+	var lheight = this.ringl.height+this.ringl.thickness;
+	var rheight = this.ringr.height+this.ringr.thickness;
+
+	this.ringl.position.set(0, 0.5*lheight*Math.sin(this.angle), -0.5*lheight*Math.sin(this.angle));
+	this.ringr.position.set(0, 0.5*rheight*Math.sin(this.angle), 0.5*rheight*Math.sin(this.angle)+this.ringsOffset);
+}
+
+RingBling.prototype.merge = function()
+{
+	// var csg = new THREE.CSG();
+	console.log("ringl_bsp");
+	var ringl_bsp = THREE.CSG.toCSG( this.ringl );
+	console.log("ringr_bsp");
+	var ringr_bsp = new ThreeBSP( this.ringr );
+
+	console.log("union_bsp");
+	var union_bsp = ringl_bsp.union( ringr_bsp );
+	console.log("result mesh");
+	var result = union_bsp.toMesh( ResMgr.materials.object );
+	result.geometry.computeVertexNormals();
+	this.add( result );
+}
+
+RingBling.prototype.mergeNew = function()
+{
+	// var csg = new THREE.CSG();
+	console.log("ringl_bsp");
+	var ringl_bsp = new ThreeBSP( this.ringl.mesh );
+	console.log("ringr_bsp");
+	var ringr_bsp = new ThreeBSP( this.ringr.mesh);
+
+	console.log("union_bsp");
+	var union_bsp = ringl_bsp.union( ringr_bsp );
+	console.log("result mesh");
+	var result = union_bsp.toMesh( resMgr.materials.object );
+	result.geometry.computeVertexNormals();
+	result.position.applyMatrix4(new THREE.Matrix4().getInverse(this.matrixWorld));
+	result.position.add(new THREE.Vector3(0, 30, 0));
+	this.add( result );
 }
 
 
