@@ -4,7 +4,7 @@ Ring = function()
 
 	this.height = siris_sizes['10'][0];
 	this.width = siris_sizes['10'][0];
-	this.thickness = 3;
+	this.thickness = 2.5;
 	this.radialSegments = 128;
 	this.tubularSegments = 32;
 	this.flaten = 0;
@@ -17,8 +17,8 @@ Ring = function()
 	this.extra.freq = 0;
 	this.extra.clamp = false;
 	this.extra.stride = 0;
-	this.extra.flattenSides = 0.35;
-	this.extra.flattenTop = 0.35;
+	this.extra.flattenSides = 0.5;
+	this.extra.flattenTop = 0.5;
 	this.extra.flattenAngle = 0;
 	this.extra.trueTubOrientation = false;
 }
@@ -35,7 +35,7 @@ Ring.prototype.updateGeometry = function(that)
 	if (that.mesh != null) {
 		that.remove(that.mesh);
 	}
-	that.mesh = new THREE.Mesh(that.geo, that.material?this.material:resMgr.materials.object);
+	that.mesh = new THREE.Mesh(that.geo, resMgr.materials.object);
 	that.mesh.castShadow = true;
 	that.mesh.receiveShadow = true;
 	this.add(that.mesh);

@@ -8,7 +8,7 @@ ResourceManager.prototype.constructor = ResourceManager;
 
 ResourceManager.prototype.initMaterials = function()
 {
-	this.materials.object = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0xffffff, shininess: 150 } );
+	this.materials.object = new THREE.MeshPhongMaterial( { color: 0xaaaaaa, specular: 0xaaaaaa, shininess: 150 } );
 	// this.materials.object.shading = THREE.FlatShading;
 
 	this.materials.ringl = new THREE.MeshPhongMaterial( { color: 0xbbbbff, specular: 0xbbbbff, shininess: 150 } );
