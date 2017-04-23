@@ -262,7 +262,7 @@ function ParametricApp() {
         ring.updateMatrixWorld(true);
         exporter = new THREE.STLExporter();
         var data = exporter.exportScene(ring);
-        download(data, filename+".stl", "application/sla", downloadType);
+        return download(data, filename+".stl", "application/sla", downloadType);
     }
 
     var currentClip = 0;

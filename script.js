@@ -44,16 +44,36 @@
         models["splint"+numberOfSplints+"Model"].loadModel("splint"+numberOfSplints+"Model", modelWidth, modelHeight, false, true);
     });
     function downloadAll() {
-        for (var splintNumber = 1; splintNumber < $(".splints .splint").length; splintNumber++) {
-            models["splint" + splintNumber + "Model"].downloadModel(
+        var modelsData = [];
+        for (var splintNumber = 1; splintNumber <= $(".splints .splint").length; splintNumber++) {
+            modelsData.push(models["splint" + splintNumber + "Model"].downloadModel(
                 $("#splintName" + splintNumber).val(),
                 "ADD_FILE_TO_ZIP"
-            );
+            ));
         }
-        models["splint" + $(".splints .splint").length + "Model"].downloadModel(
-            $("#splintName" + $(".splints .splint").length).val(),
-            "ADD_FILE_TO_ZIP_AND_DOWNLOAD"
-        );
+        console.log(modelsData);
+        addFilesToZip(modelsData);
+    }
+    function addFilesToZip(modelsData) {
+        function addFileToZip (model_index) {
+            var fd = new FormData();
+            fd.append('fname', modelsData[model_index].filename);
+            fd.append('data', modelsData[model_index].blob);
+            $.ajax({
+                type: 'POST',
+                url: '/upload.php',
+                data: fd,
+                processData: false,
+                contentType: false
+            }).done(function(data) {
+                if (model_index < modelsData.length - 1) {
+                    addFileToZip(model_index+1);
+                } else {
+                    window.location = "download.php";
+                }
+            });
+        }
+        addFileToZip(0);
     }
     function clickRemoveSplint(e) {
         $(e.target).parents(".splint").remove();

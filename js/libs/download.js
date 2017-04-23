@@ -77,34 +77,9 @@
 		blob = payload instanceof myBlob ?
 			payload :
 			new myBlob([payload], {type: mimeType}) ;
+
 		if (downloadType === "ADD_FILE_TO_ZIP") {
-			var fd = new FormData();
-			fd.append('fname', strFileName);
-			fd.append('data', blob);
-			$.ajax({
-			    type: 'POST',
-			    url: '/upload.php',
-			    data: fd,
-			    processData: false,
-			    contentType: false
-			}).done(function(data) {
-				console.log(data);
-			});
-			return false;
-		} else if (downloadType === "ADD_FILE_TO_ZIP_AND_DOWNLOAD") {
-			var fd = new FormData();
-			fd.append('fname', strFileName);
-			fd.append('data', blob);
-			$.ajax({
-			    type: 'POST',
-			    url: '/upload.php',
-			    data: fd,
-			    processData: false,
-			    contentType: false
-			}).done(function(data) {
-				window.location = "download.php";
-			});
-			return false;
+			return {"filename" : strFileName, "blob" : blob};
 		}
 
 		function dataUrlToBlob(strUrl) {
