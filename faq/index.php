@@ -32,7 +32,7 @@
           <li><a href="#aboutus">Who created this tool?</a></li>
         </article><!--
         --><article id="content">
-<h3 id="#whatis">What is Ring Bling?</h2>
+<h3 id="whatis">What is Ring Bling?</h2>
   <p>Ring Bling is an open-source web application that generates 3D models which can be used to 3D print customizable swan neck ring splints. We aim to provide a simple and cost-effective alternative for therapists and clients to obtain customizable splints, especially at smaller sizes that are expensive to obtain elsewhere.</p>
   <p>Users enter their finger measurements into the form on our website. We then process these measurements and create a 3D-printable .stl file that can be used to 3D print the user’s ring splint.</p>
 <h3 id="sizer">I don’t have a sizer. Where do I get them?</h2>
