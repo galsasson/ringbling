@@ -159,7 +159,6 @@ main > .splints .splint .splintName {
     margin-bottom:24px;
 }
 main > .splints .splint .splintName input {
-    width:587px;
     height:56px;
     font-size:32px;
     line-height:40px;
@@ -167,11 +166,9 @@ main > .splints .splint .splintName input {
 }
 main > .splints .splintMeasurement1 {
     display:inline-block;
-    margin-right:24px;
 }
-main > .splints .splintMeasurement1 input, main > .splints .splintMeasurement2 input {
+main > .splints .splintMeasurement input {
     height:56px;
-    width:175px;
     font-size:32px;
     line-height:40px;
     display:block;
@@ -181,12 +178,6 @@ main > .splints .sizerHelp {
     font-size:12pt;
     line-height:16px;
     margin-top:16px;
-}
-main > .splints .model3d {
-    display:inline-block;
-    position:absolute;
-    top:80px;
-    right:40px;
 }
 main > .splints .downloadButton {
     bottom:40px;
@@ -249,4 +240,55 @@ footer {
 footer a {
     color:white;
     border-bottom:1px dashed white;
+}
+
+
+/* Responsive updates */
+@media (min-width: 0px) {
+    main > .splints .model3d {
+        display:block;
+        margin-bottom:100px;
+        margin-top:10px;
+        max-width:100%;
+    }
+    main > .splints .splint .splintName input {
+        width:100%;
+        margin-top:50px;
+    }
+    main > .splints .splintMeasurement {
+        width:50%;
+        width:calc(50% - 10px);
+        margin-right:0px;
+    }
+    main > .splints .splintMeasurement1 {
+        margin-right:20px;
+    }
+    main > .splints .splintMeasurement input{
+        width:100%;
+    }
+}
+@media (min-width: 800px) {
+    main > .splints .splint .splintName input {
+        width:587px;
+    }
+    main > .splints .splint .splintName input {
+        margin-top:0;
+    }
+    main > .splints .splintMeasurement {
+        width:auto;
+    }
+    main > .splints .splintMeasurement1 {
+        margin-right:24px;
+    }
+    main > .splints .splintMeasurement input{
+        width:175px;
+    }
+}
+@media (min-width: 1050px) {
+    main > .splints .model3d {
+        display:inline-block;
+        position:absolute;
+        top:80px;
+        right:40px;
+    }
 }

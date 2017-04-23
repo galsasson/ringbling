@@ -62,11 +62,11 @@
                 <input id="splintNameN" name="splintNameN" value="Splint " type="text" />
                 <label for="splintNameN">Splint name</label>
             </fieldset>
-            <fieldset class="splintMeasurement1">
+            <fieldset class="splintMeasurement splintMeasurement1">
                 <input min="1" max="16" id="splintNMeasurement1" name="splintNMeasurement1" value="10" type="number" />
                 <label for="splintNMeasurement1">Ring 1 Size</label>
             </fieldset><!--
-            --><fieldset class="splintMeasurement2">
+            --><fieldset class="splintMeasurement splintMeasurement2">
                 <input min="1" max="16" id="splintNMeasurement2" name="splintNMeasurement2" value="10" type="number" />
                 <label for="splintNMeasurement2">Ring 2 Size</label>
             </fieldset>
@@ -80,6 +80,8 @@
     <script type="text/javascript">
         var models = [];
         var downloadAllButton = document.createElement("button");
+        var modelWidth = 587 > (window.innerWidth - 80) ? window.innerWidth - 80 : 587;
+        var modelHeight = 289 > window.innerHeight ? window.innerHeight : 289;
         downloadAllButton.id = "downloadAllButton";
 
         $("#addSplint").click(function(e) {
@@ -116,7 +118,7 @@
             // Model container needs to be inserted before it can be loaded
 
             models["splint"+numberOfSplints+"Model"]  = ParametricApp();
-            models["splint"+numberOfSplints+"Model"].loadModel("splint"+numberOfSplints+"Model", 587, 289, false, true);
+            models["splint"+numberOfSplints+"Model"].loadModel("splint"+numberOfSplints+"Model", modelWidth, modelHeight, false, true);
         });
         function clickRemoveSplint(e) {
             $(e.target).parents(".splint").remove();
@@ -142,7 +144,7 @@
 
         models = {"splint1Model" : ParametricApp()};
 
-        models["splint1Model"].loadModel("splint1Model", 587, 289, false, true);
+        models["splint1Model"].loadModel("splint1Model", modelWidth, modelHeight, false, true);
     </script>
   </body>
 </html>
