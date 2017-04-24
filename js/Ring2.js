@@ -71,7 +71,7 @@ Ring.prototype.RingGeometry = function(width, height, thickness, radialSegments,
 		}
 		time+=extra.freq*radAng;
 
-		var ang = r*radAng+Math.PI/2; if (ang>Math.PI*2) ang-=Math.PI*2;
+		var ang = r*radAng+Math.PI/2;
 		var rad = new THREE.Vector3(radOsc+wby2*Math.cos(ang), radOsc+hby2*Math.sin(ang), 0);
 		var tub = rad.clone().normalize().multiplyScalar(thickness);
 
@@ -90,14 +90,10 @@ Ring.prototype.RingGeometry = function(width, height, thickness, radialSegments,
 
 		for (var t=0; t<tubularSegments; t++)
 		{
-			// var tubShell = (new THREE.Vector3(0, thickness, 0)).applyAxisAngle(new THREE.Vector3(t*tubAng, 0, 0)).applyAxisAngle(new THREE.Vector3(r*radAng));
-
 			var tubShell = tub.clone().applyAxisAngle(rotAxis, t*tubAng);
-			// var a = new THREE.Euler(rotAxis.x*t*tubAng, rotAxis.y*t*tubAng, rotAxis.z*t*tubAng, 'XYZ' );
-			// var tubShell = tub.clone().applyEuler(a);
 			tubShell.x *= map(Math.abs(Math.sin(r*radAng)), 0, 1, 1, extra.flattenSides, true);
 			tubShell.y *= map(Math.cos(r*radAng), 0, 1, 1, extra.flattenTop, true);
-			tubShell.applyAxisAngle(rotAxis, extra.flattenAngle);// map(Math.sin(r*radAng), 0, 1, extra.flattenAngle, 0, true));
+			tubShell.applyAxisAngle(rotAxis, map(Math.cos(r*radAng), 0, 1, 0, extra.flattenAngle, true));
 
 
 			var vert = rad.clone().add(tubShell);
