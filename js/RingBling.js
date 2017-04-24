@@ -7,8 +7,7 @@ RingBling = function()
 	this.thickness = 2.5;
 	this.radialSegments = 128;
 	this.tubularSegments = 32;
-	this.flattenSides = 1;
-	this.flattenTop = 1;
+	this.flatten = 0;
 	this.flattenAngle = 0;
 	this.trueTubOrientation = false;
 
@@ -37,15 +36,13 @@ RingBling.prototype.updateGeometry = function(that)
 	that.ringl.thickness = that.thickness;
 	that.ringl.radialSegments = that.radialSegments;
 	that.ringl.tubularSegments = that.tubularSegments;
-	that.ringl.extra.flattenSides = that.flattenSides;
-	that.ringl.extra.flattenTop = that.flattenTop;
+	that.ringl.extra.flatten = that.flatten;
 	that.ringl.extra.flattenAngle = -that.flattenAngle;
 	that.ringl.extra.trueTubOrientation = that.trueTubOrientation;
 	that.ringr.thickness = that.thickness;
 	that.ringr.radialSegments = that.radialSegments;
 	that.ringr.tubularSegments = that.tubularSegments;
-	that.ringr.extra.flattenSides = that.flattenSides;
-	that.ringr.extra.flattenTop = that.flattenTop;
+	that.ringr.extra.flatten = that.flatten;
 	that.ringr.extra.flattenAngle = that.flattenAngle;
 	that.ringr.extra.trueTubOrientation = that.trueTubOrientation;
 

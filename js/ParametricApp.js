@@ -158,8 +158,7 @@ function ParametricApp() {
         gui.add(ring, 'thickness', 0, 6).onChange(function() {ring.updateGeometry(ring)});
         gui.add(ring, 'radialSegments', 5, 128).onChange(function() {ring.updateGeometry(ring)});
         gui.add(ring, 'tubularSegments', 5, 64).onChange(function() {ring.updateGeometry(ring)});
-        gui.add(ring, 'flattenSides', 0, 1).onChange(function() {ring.updateGeometry(ring)});
-        gui.add(ring, 'flattenTop', 0, 1).onChange(function() {ring.updateGeometry(ring)});
+        gui.add(ring, 'flatten', 0, 1).onChange(function() {ring.updateGeometry(ring)});
         gui.add(ring, 'flattenAngle', 0, Math.PI*2).onChange(function() {ring.updateGeometry(ring)});
         gui.add(ring, 'trueTubOrientation').onChange(function() {ring.updateGeometry(ring)});
 
