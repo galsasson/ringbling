@@ -16,9 +16,8 @@ Ring = function()
 	this.extra.mag = 0;
 	this.extra.freq = 0;
 	this.extra.clamp = false;
-	this.extra.stride = 0;
-	this.extra.flattenSides = 0.5;
-	this.extra.flattenTop = 0.5;
+	this.extra.flattenSides = 1;
+	this.extra.flattenTop = 1;
 	this.extra.flattenAngle = 0;
 	this.extra.trueTubOrientation = false;
 }
@@ -71,37 +70,34 @@ Ring.prototype.RingGeometry = function(width, height, thickness, radialSegments,
 			radOsc=0;
 		}
 		time+=extra.freq*radAng;
-		// var rad = radVec.clone().multiplyScalar(1+radOsc).applyAxisAngle(new THREE.Vector3(0, 0, 1), r*radAng); // rad for circle
-		// var tub = tubVec.clone().applyAxisAngle(new THREE.Vector3(0, 0, 1), r*radAng);
 
-		var rad = new THREE.Vector3(wby2*Math.cos(r*radAng+Math.PI/2), hby2*Math.sin(r*radAng+Math.PI/2), 0);
+		var ang = r*radAng+Math.PI/2; if (ang>Math.PI*2) ang-=Math.PI*2;
+		var rad = new THREE.Vector3(radOsc+wby2*Math.cos(ang), radOsc+hby2*Math.sin(ang), 0);
 		var tub = rad.clone().normalize().multiplyScalar(thickness);
-		// TODO: remove strech
-		var strech = strechVec.clone().add(new THREE.Vector3(0, 0, extra.stride*Math.cos(r*radAng)));
 
 		if (extra.trueTubOrientation) {
 			var nextRadOsc = extra.mag*(Math.sin(time));
 			if (extra.clamp && nextRadOsc<0) {
 				nextRadOsc=0;
 			}
-			// var nextRad = radVec.clone().multiplyScalar(1+nextRadOsc).applyAxisAngle(new THREE.Vector3(0, 0, 1), (r+1)*radAng);  // rad for circle
-			// var nextTub = tubVec.clone().applyAxisAngle(new THREE.Vector3(0, 0, 1), (r+1)*radAng);
-
 			var nextRad = new THREE.Vector3(wby2*Math.cos((r+1)*radAng+Math.PI/2), hby2*Math.sin((r+1)*radAng+Math.PI/2), 0);
 			var nextTub = nextRad.clone().normalize().multiplyScalar(thickness);
 			var rotAxis = nextRad.clone().sub(nextTub).sub(rad.clone().sub(tub)).normalize();
 		}
 		else {
 			var rotAxis = rad.clone().normalize().applyAxisAngle(new THREE.Vector3(0, 0, 1), Math.PI/2);
-			// var rotAxis = new THREE.Vector3(1, 0, 0);
 		}
 
 		for (var t=0; t<tubularSegments; t++)
 		{
+			// var tubShell = (new THREE.Vector3(0, thickness, 0)).applyAxisAngle(new THREE.Vector3(t*tubAng, 0, 0)).applyAxisAngle(new THREE.Vector3(r*radAng));
+
 			var tubShell = tub.clone().applyAxisAngle(rotAxis, t*tubAng);
+			// var a = new THREE.Euler(rotAxis.x*t*tubAng, rotAxis.y*t*tubAng, rotAxis.z*t*tubAng, 'XYZ' );
+			// var tubShell = tub.clone().applyEuler(a);
 			tubShell.x *= map(Math.abs(Math.sin(r*radAng)), 0, 1, 1, extra.flattenSides, true);
 			tubShell.y *= map(Math.sin(r*radAng/2), 0, 1, extra.flattenTop, 1, true);
-			tubShell.applyAxisAngle(new THREE.Vector3(1, 0, 0), extra.flattenAngle);
+			tubShell.applyAxisAngle(rotAxis, map(Math.sin(r*radAng/2), 0, 0.4, extra.flattenAngle, 0, true));
 
 
 			var vert = rad.clone().add(tubShell);
@@ -117,8 +113,8 @@ Ring.prototype.RingGeometry = function(width, height, thickness, radialSegments,
 		}
 	}
 
-	geo.computeFaceNormals();
-	geo.computeVertexNormals();
+	// geo.computeFaceNormals();
+	// geo.computeVertexNormals();
 	geo.computeBoundingSphere();
 	return geo;
 }

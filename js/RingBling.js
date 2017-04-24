@@ -3,7 +3,15 @@ RingBling = function()
 	THREE.Object3D.call(this);
 
 	this.ringsOffset = 0;
-	this.angle = Math.PI/4;
+	this.angle = 90;
+	this.thickness = 2.5;
+	this.radialSegments = 128;
+	this.tubularSegments = 32;
+	this.flattenSides = 1;
+	this.flattenTop = 1;
+	this.flattenAngle = 0;
+	this.trueTubOrientation = false;
+
 	this.ringl = null;
 	this.ringr = null;
 }
@@ -12,11 +20,11 @@ RingBling.prototype = Object.create(THREE.Object3D.prototype);
 RingBling.prototype.init = function()
 {
 	this.ringr = new Ring();
-	this.ringr.extra.flattenAngle = -Math.PI/4;
+	// this.ringr.extra.flattenAngle = -Math.PI/4;
 	this.ringr.material = resMgr.materials.ringr;
 	this.ringr.init();
 	this.ringl = new Ring();
-	this.ringl.extra.flattenAngle = Math.PI/4;
+	// this.ringl.extra.flattenAngle = Math.PI/4;
 	this.ringl.material = resMgr.materials.ringl;
 	this.ringl.init();
 	this.add(this.ringr);
@@ -26,6 +34,21 @@ RingBling.prototype.init = function()
 
 RingBling.prototype.updateGeometry = function(that)
 {
+	that.ringl.thickness = that.thickness;
+	that.ringl.radialSegments = that.radialSegments;
+	that.ringl.tubularSegments = that.tubularSegments;
+	that.ringl.extra.flattenSides = that.flattenSides;
+	that.ringl.extra.flattenTop = that.flattenTop;
+	that.ringl.extra.flattenAngle = -that.flattenAngle;
+	that.ringl.extra.trueTubOrientation = that.trueTubOrientation;
+	that.ringr.thickness = that.thickness;
+	that.ringr.radialSegments = that.radialSegments;
+	that.ringr.tubularSegments = that.tubularSegments;
+	that.ringr.extra.flattenSides = that.flattenSides;
+	that.ringr.extra.flattenTop = that.flattenTop;
+	that.ringr.extra.flattenAngle = that.flattenAngle;
+	that.ringr.extra.trueTubOrientation = that.trueTubOrientation;
+
 	that.ringl.updateGeometry(that.ringl);
 	that.ringr.updateGeometry(that.ringr);
 
@@ -34,15 +57,16 @@ RingBling.prototype.updateGeometry = function(that)
 
 RingBling.prototype.align = function()
 {
+	var angleRad = this.angle * 0.00872665
 	// put rings end to end
-	this.ringl.rotation.set(-this.angle, 0, 0);
-	this.ringr.rotation.set(this.angle, 0, 0);
+	this.ringl.rotation.set(-angleRad, 0, 0);
+	this.ringr.rotation.set(angleRad, 0, 0);
 
 	var lheight = this.ringl.height+this.ringl.thickness;
 	var rheight = this.ringr.height+this.ringr.thickness;
 
-	this.ringl.position.set(0, 0.5*lheight*Math.sin(this.angle), -0.5*lheight*Math.sin(this.angle));
-	this.ringr.position.set(0, 0.5*rheight*Math.sin(this.angle), 0.5*rheight*Math.sin(this.angle)+this.ringsOffset);
+	this.ringl.position.set(0, 0.5*lheight*Math.sin(angleRad), -0.5*lheight*Math.sin(angleRad));
+	this.ringr.position.set(0, 0.5*rheight*Math.sin(angleRad), 0.5*rheight*Math.sin(angleRad)+this.ringsOffset);
 }
 
 RingBling.prototype.merge = function()
