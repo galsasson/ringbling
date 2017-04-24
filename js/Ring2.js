@@ -96,8 +96,8 @@ Ring.prototype.RingGeometry = function(width, height, thickness, radialSegments,
 			// var a = new THREE.Euler(rotAxis.x*t*tubAng, rotAxis.y*t*tubAng, rotAxis.z*t*tubAng, 'XYZ' );
 			// var tubShell = tub.clone().applyEuler(a);
 			tubShell.x *= map(Math.abs(Math.sin(r*radAng)), 0, 1, 1, extra.flattenSides, true);
-			tubShell.y *= map(Math.sin(r*radAng/2), 0, 1, extra.flattenTop, 1, true);
-			tubShell.applyAxisAngle(rotAxis, map(Math.sin(r*radAng/2), 0, 0.4, extra.flattenAngle, 0, true));
+			tubShell.y *= map(Math.cos(r*radAng), 0, 1, 1, extra.flattenTop, true);
+			tubShell.applyAxisAngle(rotAxis, extra.flattenAngle);// map(Math.sin(r*radAng), 0, 1, extra.flattenAngle, 0, true));
 
 
 			var vert = rad.clone().add(tubShell);
