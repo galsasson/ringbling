@@ -89,9 +89,14 @@ Ring.prototype.RingGeometry = function(width, height, thickness, radialSegments,
 
 		for (var t=0; t<tubularSegments; t++)
 		{
-			// var flattenFactor = map(Math.cos(t*tubAng), -1, 1, 0, 1, true);
-			var tubShell = new THREE.Vector3(0, (1-extra.flatten)*thickness*Math.cos(-t*tubAng), thickness*Math.sin(-t*tubAng));
+			var flattenFactor = 0;
+			if (Math.sin(ang)>-0.9) {
+				flattenFactor = map(Math.sin(ang), -0.9, -0.7, 0, 1, true);
+			}
+			var tubShell = new THREE.Vector3(0, (1-extra.flatten*flattenFactor)*thickness*Math.cos(-t*tubAng), thickness*Math.sin(-t*tubAng));
 			tubShell.applyAxisAngle(new THREE.Vector3(0, 0, 1), r*radAng);
+
+			var rota = new THREE.Vector3(0, 0, 1);
 
 			tubShell.applyAxisAngle(rotAxis, map(Math.cos(r*radAng), 0, 1, 0, extra.flattenAngle, true));
 
